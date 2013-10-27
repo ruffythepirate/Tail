@@ -18,9 +18,4 @@ public class DocumentService {
     IDocument getDocument(File file) {
        return new Document(file); 
     }
-    
-    public int countDocumentRows(Document document){
-        document
-        
-    }
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import static java.nio.file.StandardOpenOption.READ;
 import java.util.Observable;
 
@@ -44,6 +45,11 @@ public class Document extends Observable implements IDocument {
         return FileChannel.open(_wrappedFile.toPath(), READ);
     }
     
+    public void updateIsModified() {
+        setChanged();
+        notifyObservers();
+    }
+    
     /**
      * Calculates how many lines big a file is, and saves the byte positions for all of these files.
      */
@@ -51,12 +57,20 @@ public class Document extends Observable implements IDocument {
         Charset charset = Charset.defaultCharset();
         try(BufferedReader reader = Files.newBufferedReader(_wrappedFile.toPath(), charset)) {
             String line = null;
+            int numberOfRows = 0;
             while((line = reader.readLine() ) != null) {
+                numberOfRows ++;
+                
                 
             }
-            
+            _numberOfLines = numberOfRows;
         }
+        
         //
+    }
+    
+    public boolean equals(Path pathToFile) {
+        return pathToFile.toFile().equals(_wrappedFile);
     }
     
 }

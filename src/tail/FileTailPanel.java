@@ -62,7 +62,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         _fileContentTxt.setEditable(false);
+        _fileContentTxt.setBackground(new java.awt.Color(51, 51, 51));
         _fileContentTxt.setColumns(20);
+        _fileContentTxt.setForeground(new java.awt.Color(153, 153, 153));
         _fileContentTxt.setRows(5);
         jScrollPane1.setViewportView(_fileContentTxt);
 

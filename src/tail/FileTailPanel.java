@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import jc.se.tail.model.impl.Document;
+import jc.se.tail.model.impl.SearchResult;
+import jc.se.tail.model.impl.SearchResultHit;
 
 /**
  *
@@ -28,6 +30,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private Document _documentToTrack;
     private int _currentNumberOfShowedLines;
     private DefaultHighlighter.DefaultHighlightPainter _highlightPainter;
+    private DefaultHighlighter.DefaultHighlightPainter _lineHighlightPainter;
+    private SearchResult _currentSearchResult;
 
     /**
      * Creates new form FileTailPanel
@@ -40,6 +44,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         _highlightPainter =
                 new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+
+        _lineHighlightPainter =
+                new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 
         updateDisplayedDocumentText();
     }
@@ -136,24 +143,12 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void _searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchBtnActionPerformed
-        
-         _fileContentTxt.getHighlighter().removeAllHighlights();
-        //Highlights search results...
         String searchText = _searchTxt.getText();
+        populateSearchResult(searchText);
 
-        String allContent = _fileContentTxt.getText();
-
-        int nextIndex = allContent.indexOf(searchText, 0);
-        while (nextIndex > -1) //We have an occurrance.
-        {
-            try {
-                _fileContentTxt.getHighlighter().addHighlight(nextIndex, nextIndex + searchText.length(),
-                        _highlightPainter);
-            } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            nextIndex = allContent.indexOf(searchText, nextIndex + 1);
-        }
+        _fileContentTxt.getHighlighter().removeAllHighlights();
+        highlightSearchResults();
+        highlightSearchResultRows();
     }//GEN-LAST:event__searchBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
@@ -206,5 +201,60 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private void scrollToBottom() {
         _fileContentTxt.setCaretPosition(_fileContentTxt.getDocument().getLength());
+    }
+
+    private void highlightLine(int lineToHighlight) throws BadLocationException {
+
+        int startIndex = _fileContentTxt.getLineStartOffset(lineToHighlight);
+        int endIndex = _fileContentTxt.getLineEndOffset(lineToHighlight);
+        _fileContentTxt.getHighlighter().addHighlight(startIndex, endIndex,
+                _lineHighlightPainter);
+    }
+
+    private void highlightSearchResults() {
+        //Highlights search results...
+        for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+            try {
+                _fileContentTxt.getHighlighter().addHighlight(hit.getHitStart(), hit.getHitEnd(),
+                        _highlightPainter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void highlightSearchResultRows() {
+        //Highlight lines
+        int lastHighlightedLine = -1;
+        for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+            try {
+                if(hit.getRowNumber() > lastHighlightedLine)
+                {
+                    highlightLine(hit.getRowNumber());
+                    lastHighlightedLine = hit.getRowNumber();
+                }
+            } catch (BadLocationException ex) {
+                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void populateSearchResult(String searchText) {
+        _currentSearchResult = new SearchResult();
+        String allContent = _fileContentTxt.getText();
+
+        int nextIndex = allContent.indexOf(searchText, 0);
+        while (nextIndex > -1) //We have an occurrance.
+        {
+            try {
+                _currentSearchResult.addSearchHit(_fileContentTxt.getLineOfOffset(nextIndex),
+                        nextIndex,
+                        nextIndex + searchText.length());
+            } catch (BadLocationException ex) {
+                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            nextIndex = allContent.indexOf(searchText, nextIndex + 1);
+        }
     }
 }

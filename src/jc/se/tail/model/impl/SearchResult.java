@@ -22,8 +22,11 @@ public class SearchResult {
     }
     
     public void addSearchHit(int rowNumber, int hitStart, int hitEnd) {
-        
-        
+        _searchResultHits.add(new SearchResultHit(rowNumber, hitStart, hitEnd));
+    }
+    
+    public List<SearchResultHit> getSearchHits() {
+        return _searchResultHits;
     }
     
 }

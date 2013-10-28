@@ -4,6 +4,7 @@
  */
 package tail;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import jc.se.tail.model.impl.Document;
 
 /**
@@ -24,6 +27,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
     private int _currentNumberOfShowedLines;
+    private DefaultHighlighter.DefaultHighlightPainter _highlightPainter;
 
     /**
      * Creates new form FileTailPanel
@@ -33,6 +37,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         doLayout();
         _documentToTrack = documentToTrack;
         _documentToTrack.addObserver(this);
+
+        _highlightPainter =
+                new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 
         updateDisplayedDocumentText();
     }
@@ -49,6 +56,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         jToolBar1 = new javax.swing.JToolBar();
         _tailFileEnd = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
+        _searchTxt = new javax.swing.JTextField();
+        _searchBtn = new javax.swing.JButton();
         _scrollPane = new javax.swing.JScrollPane();
         _fileContentTxt = new javax.swing.JTextArea();
 
@@ -77,6 +86,21 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             }
         });
         jToolBar1.add(jButton1);
+
+        _searchTxt.setMinimumSize(new java.awt.Dimension(100, 20));
+        _searchTxt.setPreferredSize(new java.awt.Dimension(100, 20));
+        jToolBar1.add(_searchTxt);
+
+        _searchBtn.setText("Search");
+        _searchBtn.setFocusable(false);
+        _searchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        _searchBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        _searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _searchBtnActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(_searchBtn);
 
         add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
@@ -108,12 +132,34 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         _fileContentTxt.setText(null);
         _currentNumberOfShowedLines = 0;
-       updateDisplayedDocumentText();
+        updateDisplayedDocumentText();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void _searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchBtnActionPerformed
+        
+         _fileContentTxt.getHighlighter().removeAllHighlights();
+        //Highlights search results...
+        String searchText = _searchTxt.getText();
+
+        String allContent = _fileContentTxt.getText();
+
+        int nextIndex = allContent.indexOf(searchText, 0);
+        while (nextIndex > -1) //We have an occurrance.
+        {
+            try {
+                _fileContentTxt.getHighlighter().addHighlight(nextIndex, nextIndex + searchText.length(),
+                        _highlightPainter);
+            } catch (BadLocationException ex) {
+                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            nextIndex = allContent.indexOf(searchText, nextIndex + 1);
+        }
+    }//GEN-LAST:event__searchBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
     private javax.swing.JScrollPane _scrollPane;
+    private javax.swing.JButton _searchBtn;
+    private javax.swing.JTextField _searchTxt;
     private javax.swing.JToggleButton _tailFileEnd;
     private javax.swing.JButton jButton1;
     private javax.swing.JToolBar jToolBar1;
@@ -131,7 +177,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             String newline = System.getProperty("line.separator");
 
             _documentToTrack.analyzeFile();
-            
+
             List<String> allLines = _documentToTrack.getTextLines(_currentNumberOfShowedLines);
 
             for (String fileLine : allLines) {

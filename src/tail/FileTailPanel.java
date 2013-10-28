@@ -4,6 +4,7 @@
  */
 package tail;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -79,11 +80,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     }// </editor-fold>//GEN-END:initComponents
 
     private void handleContentTextSizeChanged(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_handleContentTextSizeChanged
-        // TODO add your handling code here:
-        int newNumberOfLines  =getTextAreaNumberOfLines();
-        if(newNumberOfLines > _currentNumberOfShowedLines) {
-            updateDisplayedDocumentText();
-        }
         
     }//GEN-LAST:event_handleContentTextSizeChanged
 
@@ -96,7 +92,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private int getTextAreaNumberOfLines(){        
         double height = _scrollPane.getSize().getHeight();
-        int lineHeight = _fileContentTxt.getFontMetrics(_fileContentTxt.getFont()).getHeight();
+        int lineHeight = getLineHeight();
 
         return (int)Math.ceil(height / lineHeight);
     }
@@ -106,7 +102,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             String newline = System.getProperty("line.separator");
             _fileContentTxt.setText(null);
             int numberOfLines = getTextAreaNumberOfLines();
-            List<String> allLines = _documentToTrack.getTextLines(0, numberOfLines);
+            List<String> allLines = _documentToTrack.getTextLines(0);
             
             for (String fileLine : allLines) {
                 _fileContentTxt.append(fileLine);
@@ -125,5 +121,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         updateDisplayedDocumentText();
+    }
+
+    private int getLineHeight() {
+        int lineHeight = _fileContentTxt.getFontMetrics(_fileContentTxt.getFont()).getHeight();
+        return lineHeight;
     }
 }

@@ -61,10 +61,27 @@ public class Document extends Observable implements IDocument {
                 }
                 lineNumber ++;
             }
-            _numberOfLines = lineNumber;
         }
         return lines;
     }
+
+    public List<String> getTextLines(int startLine) throws IOException{
+        
+        List<String> lines = new ArrayList<String>();
+        Charset charset = Charset.defaultCharset();
+        try(BufferedReader reader = Files.newBufferedReader(_wrappedFile.toPath(), charset)) {
+            String line = null;
+            int lineNumber = 0;
+            while((line = reader.readLine() ) != null) {
+                if(lineNumber >= startLine) {
+                    lines.add(line);
+                }
+                lineNumber ++;
+            }
+        }
+        return lines;
+    }
+
     
     public void updateIsModified() {
         setChanged();

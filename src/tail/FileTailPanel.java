@@ -50,7 +50,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         updateDisplayedDocumentText();
 
-        _searchPane.setVisible(false);
+        _searchPane.setVisible(_showSearchBtn.isSelected());
     }
 
     private void scrollToNextSearchHit() {
@@ -94,13 +94,14 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         jToolBar1 = new javax.swing.JToolBar();
         _tailFileEnd = new javax.swing.JToggleButton();
-        jButton1 = new javax.swing.JButton();
         _showSearchBtn = new javax.swing.JToggleButton();
+        jButton1 = new javax.swing.JButton();
         _searchPane = new javax.swing.JPanel();
         _searchTxt = new javax.swing.JTextField();
         _previousResultBtn = new javax.swing.JButton();
         _nextSearchResultBtn = new javax.swing.JButton();
         _resultHitsLbl = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         _resultRowsLbl = new javax.swing.JLabel();
         _scrollPane = new javax.swing.JScrollPane();
         _fileContentTxt = new javax.swing.JTextArea();
@@ -109,6 +110,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         jToolBar1.setRollover(true);
 
+        _tailFileEnd.setSelected(true);
         _tailFileEnd.setText("Tail");
         _tailFileEnd.setFocusable(false);
         _tailFileEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -120,17 +122,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         });
         jToolBar1.add(_tailFileEnd);
 
-        jButton1.setText("Refresh");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jButton1);
-
+        _showSearchBtn.setSelected(true);
         _showSearchBtn.setText("Search");
         _showSearchBtn.setFocusable(false);
         _showSearchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -141,6 +133,17 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             }
         });
         jToolBar1.add(_showSearchBtn);
+
+        jButton1.setText("Refresh");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
 
         add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
@@ -173,6 +176,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         _resultHitsLbl.setText("Result Hits: 0");
         _searchPane.add(_resultHitsLbl);
+        _searchPane.add(jSeparator1);
 
         _resultRowsLbl.setText("Result Rows: 0");
         _searchPane.add(_resultRowsLbl);
@@ -248,6 +252,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JToggleButton _showSearchBtn;
     private javax.swing.JToggleButton _tailFileEnd;
     private javax.swing.JButton jButton1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 

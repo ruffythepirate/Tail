@@ -28,7 +28,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
      */
     public FileTailPanel(Document documentToTrack) {
         initComponents();
-
+        doLayout();
         _documentToTrack = documentToTrack;
         _documentToTrack.addObserver(this);
         
@@ -46,7 +46,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         jToolBar1 = new javax.swing.JToolBar();
         _tailFileEnd = new javax.swing.JToggleButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        _scrollPane = new javax.swing.JScrollPane();
         _fileContentTxt = new javax.swing.JTextArea();
 
         setLayout(new java.awt.BorderLayout());
@@ -66,35 +66,41 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _fileContentTxt.setColumns(20);
         _fileContentTxt.setForeground(new java.awt.Color(153, 153, 153));
         _fileContentTxt.setRows(5);
-        jScrollPane1.setViewportView(_fileContentTxt);
+        _scrollPane.setViewportView(_fileContentTxt);
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(_scrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
+    private javax.swing.JScrollPane _scrollPane;
     private javax.swing.JToggleButton _tailFileEnd;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
+    private int getTextAreaNumberOfLines(){        
+        double height = _fileContentTxt.getSize().getHeight();
+        int lineHeight = _fileContentTxt.getFontMetrics(_fileContentTxt.getFont()).getHeight();
+
+        return (int)Math.ceil(height / lineHeight);
+    }
+    
     private void updateDisplayedDocumentText() {
-        String newline = System.getProperty("line.separator");
-        _fileContentTxt.setText(null);
-        File fileToTrack = _documentToTrack.getFile();
-        List<String> allLines;
         try {
-            allLines = Files.readAllLines(fileToTrack.toPath(), Charset.defaultCharset());
+            String newline = System.getProperty("line.separator");
+            _fileContentTxt.setText(null);
+            int numberOfLines = getTextAreaNumberOfLines();
+            List<String> allLines = _documentToTrack.getTextLines(0, numberOfLines);
+            
             for (String fileLine : allLines) {
                 _fileContentTxt.append(fileLine);
                 _fileContentTxt.append(newline);
             }
-
+            
+            if(_tailFileEnd.isEnabled()) {
+                _fileContentTxt.setCaretPosition(_fileContentTxt.getDocument().getLength());
+            }
         } catch (IOException ex) {
             Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        if(_tailFileEnd.isEnabled()) {
-            _fileContentTxt.setCaretPosition(_fileContentTxt.getDocument().getLength());
         }
     }
 

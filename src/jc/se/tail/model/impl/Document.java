@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import static java.nio.file.StandardOpenOption.READ;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -43,6 +45,25 @@ public class Document extends Observable implements IDocument {
     
     public FileChannel getCurrentFileReader() throws IOException {
         return FileChannel.open(_wrappedFile.toPath(), READ);
+    }
+    
+    public List<String> getTextLines(int startLine, int numberOfLinesToReturn) throws IOException{
+        
+        List<String> lines = new ArrayList<String>();
+        Charset charset = Charset.defaultCharset();
+        try(BufferedReader reader = Files.newBufferedReader(_wrappedFile.toPath(), charset)) {
+            String line = null;
+            int lineNumber = 0;
+            while(lineNumber <= startLine + numberOfLinesToReturn 
+                    && (line = reader.readLine() ) != null) {
+                if(lineNumber >= startLine) {
+                    lines.add(line);
+                }
+                lineNumber ++;
+            }
+            _numberOfLines = lineNumber;
+        }
+        return lines;
     }
     
     public void updateIsModified() {

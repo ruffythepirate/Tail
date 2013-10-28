@@ -59,6 +59,9 @@
             </Property>
             <Property name="rows" type="int" value="5"/>
           </Properties>
+          <Events>
+            <EventHandler event="componentResized" listener="java.awt.event.ComponentListener" parameters="java.awt.event.ComponentEvent" handler="handleContentTextSizeChanged"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

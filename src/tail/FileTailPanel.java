@@ -23,6 +23,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
 
+    private int _currentNumberOfShowedLines;
+    
     /**
      * Creates new form FileTailPanel
      */
@@ -66,10 +68,25 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _fileContentTxt.setColumns(20);
         _fileContentTxt.setForeground(new java.awt.Color(153, 153, 153));
         _fileContentTxt.setRows(5);
+        _fileContentTxt.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                handleContentTextSizeChanged(evt);
+            }
+        });
         _scrollPane.setViewportView(_fileContentTxt);
 
         add(_scrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void handleContentTextSizeChanged(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_handleContentTextSizeChanged
+        // TODO add your handling code here:
+        int newNumberOfLines  =getTextAreaNumberOfLines();
+        if(newNumberOfLines > _currentNumberOfShowedLines) {
+            updateDisplayedDocumentText();
+        }
+        
+    }//GEN-LAST:event_handleContentTextSizeChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
     private javax.swing.JScrollPane _scrollPane;
@@ -78,7 +95,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     // End of variables declaration//GEN-END:variables
 
     private int getTextAreaNumberOfLines(){        
-        double height = _fileContentTxt.getSize().getHeight();
+        double height = _scrollPane.getSize().getHeight();
         int lineHeight = _fileContentTxt.getFontMetrics(_fileContentTxt.getFont()).getHeight();
 
         return (int)Math.ceil(height / lineHeight);
@@ -99,6 +116,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             if(_tailFileEnd.isEnabled()) {
                 _fileContentTxt.setCaretPosition(_fileContentTxt.getDocument().getLength());
             }
+            _currentNumberOfShowedLines = numberOfLines;
         } catch (IOException ex) {
             Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
         }

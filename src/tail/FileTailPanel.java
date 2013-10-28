@@ -49,6 +49,38 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 
         updateDisplayedDocumentText();
+
+        _searchPane.setVisible(false);
+    }
+
+    private void scrollToNextSearchHit() {
+        if (_currentSearchResult != null) {
+            int caretPosition = _fileContentTxt.getCaretPosition();
+            SearchResultHit nextHit = getNextSearchHit(caretPosition);
+
+            if (nextHit != null) {
+                scrollToSearchHit(nextHit);
+            }
+        }
+    }
+
+    private void scrollToSearchHit(SearchResultHit hitToScrollTo) {
+        _fileContentTxt.setCaretPosition(hitToScrollTo.getHitStart());
+    }
+
+    private void clearHighlighting(){
+        _fileContentTxt.getHighlighter().removeAllHighlights();
+    }
+    
+    private void scrollToPreviousSearchHit() {
+        if (_currentSearchResult != null) {
+            int caretPosition = _fileContentTxt.getCaretPosition();
+            SearchResultHit nextHit = getPreviousSearchHit(caretPosition);
+
+            if (nextHit != null) {
+                scrollToSearchHit(nextHit);
+            }
+        }
     }
 
     /**
@@ -63,8 +95,13 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         jToolBar1 = new javax.swing.JToolBar();
         _tailFileEnd = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
+        _showSearchBtn = new javax.swing.JToggleButton();
+        _searchPane = new javax.swing.JPanel();
         _searchTxt = new javax.swing.JTextField();
-        _searchBtn = new javax.swing.JButton();
+        _previousResultBtn = new javax.swing.JButton();
+        _nextSearchResultBtn = new javax.swing.JButton();
+        _resultHitsLbl = new javax.swing.JLabel();
+        _resultRowsLbl = new javax.swing.JLabel();
         _scrollPane = new javax.swing.JScrollPane();
         _fileContentTxt = new javax.swing.JTextArea();
 
@@ -94,22 +131,53 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         });
         jToolBar1.add(jButton1);
 
-        _searchTxt.setMinimumSize(new java.awt.Dimension(100, 20));
-        _searchTxt.setPreferredSize(new java.awt.Dimension(100, 20));
-        jToolBar1.add(_searchTxt);
-
-        _searchBtn.setText("Search");
-        _searchBtn.setFocusable(false);
-        _searchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        _searchBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        _searchBtn.addActionListener(new java.awt.event.ActionListener() {
+        _showSearchBtn.setText("Search");
+        _showSearchBtn.setFocusable(false);
+        _showSearchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        _showSearchBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        _showSearchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                _searchBtnActionPerformed(evt);
+                _showSearchBtnActionPerformed(evt);
             }
         });
-        jToolBar1.add(_searchBtn);
+        jToolBar1.add(_showSearchBtn);
 
         add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+
+        _searchPane.setLayout(new javax.swing.BoxLayout(_searchPane, javax.swing.BoxLayout.LINE_AXIS));
+
+        _searchTxt.setMinimumSize(new java.awt.Dimension(100, 20));
+        _searchTxt.setPreferredSize(new java.awt.Dimension(100, 20));
+        _searchTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _searchTxtActionPerformed(evt);
+            }
+        });
+        _searchTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                _searchTxtKeyTyped(evt);
+            }
+        });
+        _searchPane.add(_searchTxt);
+
+        _previousResultBtn.setText("<");
+        _searchPane.add(_previousResultBtn);
+
+        _nextSearchResultBtn.setText(">");
+        _nextSearchResultBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _nextSearchResultBtnActionPerformed(evt);
+            }
+        });
+        _searchPane.add(_nextSearchResultBtn);
+
+        _resultHitsLbl.setText("Result Hits: 0");
+        _searchPane.add(_resultHitsLbl);
+
+        _resultRowsLbl.setText("Result Rows: 0");
+        _searchPane.add(_resultRowsLbl);
+
+        add(_searchPane, java.awt.BorderLayout.PAGE_END);
 
         _fileContentTxt.setEditable(false);
         _fileContentTxt.setBackground(new java.awt.Color(51, 51, 51));
@@ -130,7 +198,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     }//GEN-LAST:event_handleContentTextSizeChanged
 
     private void _tailFileEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__tailFileEndActionPerformed
-        if (_tailFileEnd.isEnabled()) {
+        if (_tailFileEnd.isSelected()) {
             //We scroll to the bottom of the document.
             scrollToBottom();
         }
@@ -142,19 +210,42 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         updateDisplayedDocumentText();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void _searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchBtnActionPerformed
-        String searchText = _searchTxt.getText();
-        populateSearchResult(searchText);
+    private void _showSearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__showSearchBtnActionPerformed
+        // TODO add your handling code here:
+        _searchPane.setVisible(_showSearchBtn.isSelected());
+    }//GEN-LAST:event__showSearchBtnActionPerformed
 
-        _fileContentTxt.getHighlighter().removeAllHighlights();
-        highlightSearchResults();
-        highlightSearchResultRows();
-    }//GEN-LAST:event__searchBtnActionPerformed
+    private void _searchTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event__searchTxtKeyTyped
+        //Pressing enter selects next entry;
+        String searchText = _searchTxt.getText();
+        searchText += evt.getKeyChar();
+        if (searchText != null && searchText.length() > 0) {
+            populateSearchResult(searchText);
+            clearHighlighting();
+            highlightSearchResults();
+            highlightSearchResultRows();
+        } else {
+            clearHighlighting();
+        }
+    }//GEN-LAST:event__searchTxtKeyTyped
+
+    private void _nextSearchResultBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__nextSearchResultBtnActionPerformed
+        scrollToNextSearchHit();
+    }//GEN-LAST:event__nextSearchResultBtnActionPerformed
+
+    private void _searchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchTxtActionPerformed
+        scrollToNextSearchHit();
+    }//GEN-LAST:event__searchTxtActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
+    private javax.swing.JButton _nextSearchResultBtn;
+    private javax.swing.JButton _previousResultBtn;
+    private javax.swing.JLabel _resultHitsLbl;
+    private javax.swing.JLabel _resultRowsLbl;
     private javax.swing.JScrollPane _scrollPane;
-    private javax.swing.JButton _searchBtn;
+    private javax.swing.JPanel _searchPane;
     private javax.swing.JTextField _searchTxt;
+    private javax.swing.JToggleButton _showSearchBtn;
     private javax.swing.JToggleButton _tailFileEnd;
     private javax.swing.JButton jButton1;
     private javax.swing.JToolBar jToolBar1;
@@ -180,7 +271,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 _fileContentTxt.append(newline);
             }
 
-            if (_tailFileEnd.isEnabled()) {
+            if (_tailFileEnd.isSelected()) {
                 scrollToBottom();
             }
             _currentNumberOfShowedLines += allLines.size();
@@ -228,8 +319,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         int lastHighlightedLine = -1;
         for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
             try {
-                if(hit.getRowNumber() > lastHighlightedLine)
-                {
+                if (hit.getRowNumber() > lastHighlightedLine) {
                     highlightLine(hit.getRowNumber());
                     lastHighlightedLine = hit.getRowNumber();
                 }
@@ -244,17 +334,67 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         String allContent = _fileContentTxt.getText();
 
         int nextIndex = allContent.indexOf(searchText, 0);
+        int numberOfRows = 0;
+        int lastRow = -1;
         while (nextIndex > -1) //We have an occurrance.
         {
             try {
-                _currentSearchResult.addSearchHit(_fileContentTxt.getLineOfOffset(nextIndex),
+                int rowNumber = _fileContentTxt.getLineOfOffset(nextIndex);
+                _currentSearchResult.addSearchHit(rowNumber,
                         nextIndex,
                         nextIndex + searchText.length());
+                if(rowNumber > lastRow) {
+                    numberOfRows++;
+                    lastRow = rowNumber;
+                }
             } catch (BadLocationException ex) {
                 Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             nextIndex = allContent.indexOf(searchText, nextIndex + 1);
         }
+        
+        _resultRowsLbl.setText("Total Rows: " + numberOfRows);
+        _resultHitsLbl.setText("Total Hits: " + _currentSearchResult.getSearchHits().size());
+        
+    }
+
+    private SearchResultHit getPreviousSearchHit(int caretPosition) {
+        SearchResultHit previousHit = null;
+        for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+            if (hit.getHitStart() < caretPosition
+                    && (previousHit == null || hit.getHitStart() > previousHit.getHitStart())) {
+                previousHit = hit;
+            }
+        }
+
+        if (previousHit == null) {
+            for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+                if ((previousHit == null || hit.getHitStart() > previousHit.getHitStart())) {
+                    previousHit = hit;
+                }
+            }
+        }
+        return previousHit;
+
+    }
+
+    private SearchResultHit getNextSearchHit(int caretPosition) {
+        SearchResultHit nextHit = null;
+        for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+            if (hit.getHitStart() > caretPosition
+                    && (nextHit == null || hit.getHitStart() < nextHit.getHitStart())) {
+                nextHit = hit;
+            }
+        }
+
+        if (nextHit == null) {
+            for (SearchResultHit hit : _currentSearchResult.getSearchHits()) {
+                if ((nextHit == null || hit.getHitStart() < nextHit.getHitStart())) {
+                    nextHit = hit;
+                }
+            }
+        }
+        return nextHit;
     }
 }

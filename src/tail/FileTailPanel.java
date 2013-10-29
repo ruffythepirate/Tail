@@ -24,6 +24,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import jc.se.tail.model.impl.Document;
+import jc.se.tail.model.impl.IDocumentViewPortal;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
 
@@ -34,6 +35,7 @@ import jc.se.tail.model.impl.SearchResultHit;
 public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
+    private IDocumentViewPortal _documentViewPortal;
     private int _currentNumberOfShowedLines;
     private DefaultHighlighter.DefaultHighlightPainter _highlightPainter;
     private DefaultHighlighter.DefaultHighlightPainter _lineHighlightPainter;
@@ -46,7 +48,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         initComponents();
         doLayout();
         _documentToTrack = documentToTrack;
-        _documentToTrack.addObserver(this);
+        _documentViewPortal = documentToTrack.getNormalView();
+        _documentViewPortal.addObserver(this);
 
         _highlightPainter =
                 new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
@@ -61,6 +64,14 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         registerActivateSearchHotKey();
         
         
+    }
+    
+    public void setFilter(String filterText, int rowsBefore, int rowsAfter) {
+        _documentViewPortal.deleteObserver(this);
+        _documentViewPortal = _documentToTrack.getFilterView(filterText, rowsBefore, rowsAfter);
+        _documentViewPortal.addObserver(this);
+        
+        refreshDisplayedDocumentText();
     }
 
     private void registerActivateSearchHotKey() {
@@ -301,13 +312,19 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         return (int) Math.ceil(height / lineHeight);
     }
 
+    private void refreshDisplayedDocumentText() {
+        _fileContentTxt.setText(null);
+        _currentNumberOfShowedLines = 0;
+        updateDisplayedDocumentText();
+    }
+    
     private void updateDisplayedDocumentText() {
         try {
             String newline = System.getProperty("line.separator");
 
             _documentToTrack.analyzeFile();
 
-            List<String> allLines = _documentToTrack.getTextLines(_currentNumberOfShowedLines);
+            List<String> allLines = _documentViewPortal.getTextLines(_currentNumberOfShowedLines);
 
             for (String fileLine : allLines) {
                 _fileContentTxt.append(fileLine);

@@ -33,6 +33,14 @@ public class Document extends Observable implements IDocument {
         _lineReadPositions = new ArrayList<RowInfo>();
     }
 
+    public IDocumentViewPortal getFilterView(String filterText, int linesBefore, int linesAfter) {
+        return new DocumentFilterView(this, filterText, linesBefore, linesAfter);
+    }
+    
+    public IDocumentViewPortal getNormalView() {
+        return new PlainDocumentViewPortal(this);
+    }
+    
     @Override
     public int getNumberOfLines() {
         return _numberOfLines;

@@ -45,10 +45,13 @@ public class TailWindow extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        _filterMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(600, 500));
 
         _tabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         _tabbedPane.setPreferredSize(new java.awt.Dimension(300, 300));
@@ -73,6 +76,19 @@ public class TailWindow extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu3.setText("Edit");
+
+        _filterMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        _filterMenuItem.setText("Filter");
+        _filterMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _filterMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(_filterMenuItem);
+
+        jMenuBar1.add(jMenu3);
 
         jMenu2.setText("Help");
 
@@ -119,6 +135,26 @@ public class TailWindow extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void _filterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterMenuItemActionPerformed
+        // TODO add your handling code here:
+
+        FileTailPanel selectedPanel = (FileTailPanel) _tabbedPane.getSelectedComponent();
+
+        if (selectedPanel != null) {
+            FilterDialog settings = new FilterDialog(this, true);
+
+            settings.setVisible(true);
+
+            boolean shouldFilter = settings.getShouldFilter();
+            if (shouldFilter) {
+                //We create a filter for the current tab.
+                selectedPanel.setFilter(settings.getFilterText(),
+                        settings.getRowsBefore(), settings.getRowsAfter());
+            }
+        }
+
+    }//GEN-LAST:event__filterMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -155,9 +191,11 @@ public class TailWindow extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser _fileChooser;
+    private javax.swing.JMenuItem _filterMenuItem;
     private javax.swing.JTabbedPane _tabbedPane;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

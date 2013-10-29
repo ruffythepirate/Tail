@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.manager.DocumentManager;
@@ -46,6 +47,7 @@ public class TailWindow extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        _searchMenuItem = new javax.swing.JMenuItem();
         _filterMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -78,6 +80,15 @@ public class TailWindow extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu3.setText("Edit");
+
+        _searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        _searchMenuItem.setText("Search");
+        _searchMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _searchMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(_searchMenuItem);
 
         _filterMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         _filterMenuItem.setText("Filter");
@@ -136,9 +147,8 @@ public class TailWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void _filterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterMenuItemActionPerformed
-        // TODO add your handling code here:
 
-        FileTailPanel selectedPanel = (FileTailPanel) _tabbedPane.getSelectedComponent();
+        FileTailPanel selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             FilterDialog settings = new FilterDialog(this, true);
@@ -154,6 +164,22 @@ public class TailWindow extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event__filterMenuItemActionPerformed
+
+    private FileTailPanel getActiveFilePane() {
+        // TODO add your handling code here:
+        FileTailPanel selectedPanel = (FileTailPanel) _tabbedPane.getSelectedComponent();
+        return selectedPanel;
+    }
+
+    private void _searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchMenuItemActionPerformed
+        FileTailPanel selectedPanel = getActiveFilePane();
+        if(selectedPanel != null) {
+            Action searchAction =  selectedPanel.getActionMap().get("activate search");
+            if(searchAction != null) {
+                searchAction.actionPerformed(null);
+            }
+        }
+    }//GEN-LAST:event__searchMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,6 +218,7 @@ public class TailWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser _fileChooser;
     private javax.swing.JMenuItem _filterMenuItem;
+    private javax.swing.JMenuItem _searchMenuItem;
     private javax.swing.JTabbedPane _tabbedPane;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

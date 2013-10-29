@@ -6,6 +6,9 @@ package tail;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -15,6 +18,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import jc.se.tail.model.impl.Document;
@@ -51,6 +57,31 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         updateDisplayedDocumentText();
 
         _searchPane.setVisible(_showSearchBtn.isSelected());
+        
+        registerActivateSearchHotKey();
+        
+        
+    }
+
+    private void registerActivateSearchHotKey() {
+        //Register serach hot key
+        AbstractAction activateSearchAction = new AbstractAction("activate search"){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                _showSearchBtn.setSelected(true);
+                _searchPane.setVisible(true);
+                _searchTxt.requestFocus();
+            }            
+        };
+        
+        KeyStroke keyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK, false );
+        
+        this.getActionMap().put("activate search", activateSearchAction);
+        _fileContentTxt.getActionMap().put("activate search", activateSearchAction);
+        
+        this.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
+        _fileContentTxt.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
     }
 
     private void scrollToNextSearchHit() {

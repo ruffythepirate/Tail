@@ -160,6 +160,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 _searchTxtKeyTyped(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                _searchTxtKeyReleased(evt);
+            }
         });
         _searchPane.add(_searchTxt);
 
@@ -220,17 +223,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     }//GEN-LAST:event__showSearchBtnActionPerformed
 
     private void _searchTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event__searchTxtKeyTyped
-        //Pressing enter selects next entry;
-        String searchText = _searchTxt.getText();
-        searchText += evt.getKeyChar();
-        if (searchText != null && searchText.length() > 0) {
-            populateSearchResult(searchText);
-            clearHighlighting();
-            highlightSearchResults();
-            highlightSearchResultRows();
-        } else {
-            clearHighlighting();
-        }
+
     }//GEN-LAST:event__searchTxtKeyTyped
 
     private void _nextSearchResultBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__nextSearchResultBtnActionPerformed
@@ -240,6 +233,20 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private void _searchTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchTxtActionPerformed
         scrollToNextSearchHit();
     }//GEN-LAST:event__searchTxtActionPerformed
+
+    private void _searchTxtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event__searchTxtKeyReleased
+        //Pressing enter selects next entry;
+        String searchText = _searchTxt.getText();
+        if (searchText != null && searchText.length() > 0) {
+            populateSearchResult(searchText);
+            clearHighlighting();
+            highlightSearchResults();
+            highlightSearchResultRows();
+        } else {
+            clearHighlighting();
+        }
+    }//GEN-LAST:event__searchTxtKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea _fileContentTxt;
     private javax.swing.JButton _nextSearchResultBtn;

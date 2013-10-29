@@ -243,7 +243,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             highlightSearchResults();
             highlightSearchResultRows();
         } else {
-            clearHighlighting();
+            clearSearchResult();
         }
     }//GEN-LAST:event__searchTxtKeyReleased
 
@@ -365,10 +365,25 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
             nextIndex = allContent.indexOf(searchText, nextIndex + 1);
         }
+        updateSearchResultLabels(numberOfRows);
         
+    }
+    
+    private void clearSearchResult()
+    {
+        _currentSearchResult = null;
+        updateSearchResultLabels(0);
+        clearHighlighting();
+    }
+
+    private void updateSearchResultLabels(int numberOfRows) {
         _resultRowsLbl.setText("Total Rows: " + numberOfRows);
-        _resultHitsLbl.setText("Total Hits: " + _currentSearchResult.getSearchHits().size());
-        
+        if(_currentSearchResult != null)
+        {
+            _resultHitsLbl.setText("Total Hits: " + _currentSearchResult.getSearchHits().size());
+        } else {
+            _resultHitsLbl.setText("Total Hits: 0");            
+        }
     }
 
     private SearchResultHit getPreviousSearchHit(int caretPosition) {

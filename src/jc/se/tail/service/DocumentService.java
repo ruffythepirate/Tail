@@ -15,7 +15,7 @@ import jc.se.tail.model.impl.IDocument;
  * @author ruffy
  */
 public class DocumentService {
-    IDocument getDocument(File file) {
+    Document getDocument(File file) {
        return new Document(file); 
     }
 }

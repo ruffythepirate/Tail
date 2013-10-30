@@ -22,7 +22,7 @@ import java.util.Observable;
  *
  * @author ruffy
  */
-public class Document extends Observable implements IDocument {
+public class Document extends DocumentViewBase{
 
     private File _wrappedFile;
     private int _numberOfLines;
@@ -41,12 +41,10 @@ public class Document extends Observable implements IDocument {
         return new PlainDocumentViewPortal(this);
     }
     
-    @Override
     public int getNumberOfLines() {
         return _numberOfLines;
     }
 
-    @Override
     public File getFile() {
         return _wrappedFile;
     }
@@ -91,6 +89,7 @@ public class Document extends Observable implements IDocument {
     }
 
     public void updateIsModified() {
+        
         setChanged();
         notifyObservers();
     }
@@ -128,5 +127,15 @@ public class Document extends Observable implements IDocument {
             startPosition = _lineReadPositions.get(startLine - 1).getRowEndPosition();
         }
         return startPosition;
+    }
+
+    @Override
+    public int getDocumentTotalRows() {
+        return _numberOfLines;
+    }
+
+    @Override
+    public int getViewPortalTotalRows() {
+        return _numberOfLines;
     }
 }

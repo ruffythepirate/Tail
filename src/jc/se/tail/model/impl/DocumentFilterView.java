@@ -18,7 +18,7 @@ import java.util.Queue;
  *
  * @author ruffy
  */
-public class DocumentFilterView extends Observable implements Observer, IDocumentViewPortal{
+public class DocumentFilterView extends DocumentViewBase implements Observer{
     
     private String _filterString;
     private int _rowsAbove;

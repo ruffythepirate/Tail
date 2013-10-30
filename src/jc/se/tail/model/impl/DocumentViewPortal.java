@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author ruffy
  */
-public class DocumentViewPortal {
+public class DocumentViewPortal extends DocumentViewBase{
     private int _startLine;
     
     private int _numberOfLines;
@@ -27,6 +27,21 @@ public class DocumentViewPortal {
     public List<String> getTextLines(int startLine, int numberOfLines) throws IOException {
         return _document.getTextLines(startLine, numberOfLines);
     }
+
+    @Override
+    public List<String> getTextLines(int startLine) throws IOException {
+        return _document.getTextLines(startLine);
+    }
+
+    @Override
+    public int getDocumentTotalRows() {
+         return _document.getNumberOfLines();
+    }
+
+    @Override
+    public int getViewPortalTotalRows() {
+         return _document.getNumberOfLines();
+   }
     
     
 }

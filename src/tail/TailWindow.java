@@ -12,7 +12,7 @@ import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.manager.DocumentManager;
-import jc.se.tail.model.impl.Document;
+import jc.se.tail.model.document.Document;
 
 /**
  *

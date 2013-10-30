@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jc.se.tail.model.impl;
+package jc.se.tail.model.document;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import jc.se.tail.model.document.DocumentViewUpdatedArgs;
+import jc.se.tail.model.impl.RowInfo;
 
 /**
  *

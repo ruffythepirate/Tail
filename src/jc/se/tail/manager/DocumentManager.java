@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jc.se.tail.model.impl.Document;
+import jc.se.tail.model.document.Document;
 import static java.nio.file.StandardWatchEventKinds.*;
 import java.nio.file.WatchEvent;
 

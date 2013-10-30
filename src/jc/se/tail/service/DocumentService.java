@@ -7,7 +7,7 @@
 package jc.se.tail.service;
 
 import java.io.File;
-import jc.se.tail.model.impl.Document;
+import jc.se.tail.model.document.Document;
 
 /**
  *

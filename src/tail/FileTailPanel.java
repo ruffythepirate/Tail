@@ -23,8 +23,8 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import jc.se.tail.model.impl.Document;
-import jc.se.tail.model.impl.IDocumentViewPortal;
+import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.IDocumentViewPortal;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
 

@@ -134,7 +134,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        _toolBar = new javax.swing.JToolBar();
+        _toolBarPane = new javax.swing.JPanel();
         _tailFileEnd = new javax.swing.JToggleButton();
         _showSearchBtn = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
@@ -153,44 +153,49 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         setLayout(new java.awt.BorderLayout());
 
-        _toolBar.setRollover(true);
+        _toolBarPane.setMinimumSize(new java.awt.Dimension(49, 0));
+        _toolBarPane.setLayout(new javax.swing.BoxLayout(_toolBarPane, javax.swing.BoxLayout.LINE_AXIS));
 
         _tailFileEnd.setSelected(true);
         _tailFileEnd.setText("Tail");
         _tailFileEnd.setFocusable(false);
         _tailFileEnd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        _tailFileEnd.setMaximumSize(new java.awt.Dimension(49, 20));
         _tailFileEnd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         _tailFileEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _tailFileEndActionPerformed(evt);
             }
         });
-        _toolBar.add(_tailFileEnd);
+        _toolBarPane.add(_tailFileEnd);
 
         _showSearchBtn.setSelected(true);
         _showSearchBtn.setText("Search");
         _showSearchBtn.setFocusable(false);
         _showSearchBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        _showSearchBtn.setMaximumSize(new java.awt.Dimension(65, 20));
         _showSearchBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         _showSearchBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _showSearchBtnActionPerformed(evt);
             }
         });
-        _toolBar.add(_showSearchBtn);
+        _toolBarPane.add(_showSearchBtn);
 
         jButton1.setText("Refresh");
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setMaximumSize(new java.awt.Dimension(31, 23));
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        _toolBar.add(jButton1);
+        _toolBarPane.add(jButton1);
 
         _labelContainerPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204)));
+        _labelContainerPane.setMaximumSize(new java.awt.Dimension(2147483647, 20));
         _labelContainerPane.setLayout(new java.awt.BorderLayout());
 
         _addFilterBtn.setText("+");
@@ -200,11 +205,15 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             }
         });
         _labelContainerPane.add(_addFilterBtn, java.awt.BorderLayout.EAST);
+
+        _labelPane.setMaximumSize(new java.awt.Dimension(32767, 20));
+        _labelPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
         _labelContainerPane.add(_labelPane, java.awt.BorderLayout.CENTER);
 
-        _toolBar.add(_labelContainerPane);
+        _toolBarPane.add(_labelContainerPane);
 
-        add(_toolBar, java.awt.BorderLayout.PAGE_START);
+        add(_toolBarPane, java.awt.BorderLayout.NORTH);
+        _toolBarPane.getAccessibleContext().setAccessibleName("");
 
         _searchPane.setLayout(new javax.swing.BoxLayout(_searchPane, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -333,7 +342,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JTextField _searchTxt;
     private javax.swing.JToggleButton _showSearchBtn;
     private javax.swing.JToggleButton _tailFileEnd;
-    private javax.swing.JToolBar _toolBar;
+    private javax.swing.JPanel _toolBarPane;
     private javax.swing.JButton jButton1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables

@@ -86,8 +86,8 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
             }
         });
         add(newLabel);
-        invalidate();
-    }
+        revalidate();
+   }
     
     private void removeLabel(String label) {
         for(JLabel addedLabel : _labelComponents) {
@@ -97,7 +97,7 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
                 break;
             }
         }
-        invalidate();
+        revalidate();
     }
 
     public LabelList getLabelList() {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tail;
+package jc.se.tail.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -134,10 +134,13 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
+        _toolBar = new javax.swing.JToolBar();
         _tailFileEnd = new javax.swing.JToggleButton();
         _showSearchBtn = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
+        _labelContainerPane = new javax.swing.JPanel();
+        _addFilterBtn = new javax.swing.JButton();
+        _labelPane = new jc.se.util.view.labelpane.LabelPane();
         _searchPane = new javax.swing.JPanel();
         _searchTxt = new javax.swing.JTextField();
         _previousResultBtn = new javax.swing.JButton();
@@ -150,7 +153,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         setLayout(new java.awt.BorderLayout());
 
-        jToolBar1.setRollover(true);
+        _toolBar.setRollover(true);
 
         _tailFileEnd.setSelected(true);
         _tailFileEnd.setText("Tail");
@@ -162,7 +165,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 _tailFileEndActionPerformed(evt);
             }
         });
-        jToolBar1.add(_tailFileEnd);
+        _toolBar.add(_tailFileEnd);
 
         _showSearchBtn.setSelected(true);
         _showSearchBtn.setText("Search");
@@ -174,7 +177,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 _showSearchBtnActionPerformed(evt);
             }
         });
-        jToolBar1.add(_showSearchBtn);
+        _toolBar.add(_showSearchBtn);
 
         jButton1.setText("Refresh");
         jButton1.setFocusable(false);
@@ -185,9 +188,23 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 jButton1ActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        _toolBar.add(jButton1);
 
-        add(jToolBar1, java.awt.BorderLayout.PAGE_START);
+        _labelContainerPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204)));
+        _labelContainerPane.setLayout(new java.awt.BorderLayout());
+
+        _addFilterBtn.setText("+");
+        _addFilterBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _addFilterBtnActionPerformed(evt);
+            }
+        });
+        _labelContainerPane.add(_addFilterBtn, java.awt.BorderLayout.EAST);
+        _labelContainerPane.add(_labelPane, java.awt.BorderLayout.CENTER);
+
+        _toolBar.add(_labelContainerPane);
+
+        add(_toolBar, java.awt.BorderLayout.PAGE_START);
 
         _searchPane.setLayout(new javax.swing.BoxLayout(_searchPane, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -289,8 +306,24 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         }
     }//GEN-LAST:event__searchTxtKeyReleased
 
+    private void _addFilterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__addFilterBtnActionPerformed
+
+            FilterDialog settings = new FilterDialog(null, true);
+            settings.setVisible(true);
+            boolean shouldFilter = settings.getShouldFilter();
+            if (shouldFilter) {
+                _labelPane.getLabelList().addLabel(settings.getFilterText());
+                _labelContainerPane.invalidate();
+                _labelPane.repaint();
+                repaint();
+            }
+    }//GEN-LAST:event__addFilterBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton _addFilterBtn;
     private javax.swing.JTextArea _fileContentTxt;
+    private javax.swing.JPanel _labelContainerPane;
+    private jc.se.util.view.labelpane.LabelPane _labelPane;
     private javax.swing.JButton _nextSearchResultBtn;
     private javax.swing.JButton _previousResultBtn;
     private javax.swing.JLabel _resultHitsLbl;
@@ -300,9 +333,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JTextField _searchTxt;
     private javax.swing.JToggleButton _showSearchBtn;
     private javax.swing.JToggleButton _tailFileEnd;
+    private javax.swing.JToolBar _toolBar;
     private javax.swing.JButton jButton1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
     private int getTextAreaNumberOfLines() {

@@ -8,40 +8,46 @@ package jc.se.tail.model.impl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author ruffy
  */
-public class DocumentViewPortal extends DocumentViewBase{
+public class TailDocumentView extends DocumentViewBase implements Observer{
     private int _startLine;
     
     private int _numberOfLines;
     
-    private Document _document;
+    private DocumentViewBase _parentDocumentView;
     
-    public DocumentViewPortal(Document parentDocument){
-        _document = parentDocument;
+    public TailDocumentView(DocumentViewBase parentDocument){
+        _parentDocumentView = parentDocument;
+        
+        
     }
     
-    public List<String> getTextLines(int startLine, int numberOfLines) throws IOException {
-        return _document.getTextLines(startLine, numberOfLines);
-    }
-
     @Override
     public List<String> getTextLines(int startLine) throws IOException {
-        return _document.getTextLines(startLine);
+        return _parentDocumentView.getTextLines(startLine);
     }
 
     @Override
     public int getDocumentTotalRows() {
-         return _document.getNumberOfLines();
+         return _parentDocumentView.getDocumentTotalRows();
     }
 
     @Override
     public int getViewPortalTotalRows() {
-         return _document.getNumberOfLines();
+         return _parentDocumentView.getViewPortalTotalRows();
    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        setChanged();
+        notifyObservers();
+    }
     
     
 }

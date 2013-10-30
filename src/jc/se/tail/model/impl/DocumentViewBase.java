@@ -15,6 +15,9 @@ import java.util.Observable;
  */
 public abstract class DocumentViewBase extends Observable implements IDocumentViewPortal {
 
+    protected List<String> _documentLines;
+    protected DocumentViewBase _parentDocumentView;
+    
     @Override
     public abstract List<String> getTextLines(int startLine) throws IOException;
 
@@ -23,5 +26,28 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
 
     @Override
     public abstract int getViewPortalTotalRows();
+
+    public void clearCachedData()
+    {
+        _documentLines.clear();
+        if(_parentDocumentView != null) {
+            _parentDocumentView.clearCachedData();
+        }
+    }
+    
+    
+    /**
+     * @return the _parentDocumentView
+     */
+    public DocumentViewBase getParentDocumentView() {
+        return _parentDocumentView;
+    }
+
+    /**
+     * @param _parentDocumentView the _parentDocumentView to set
+     */
+    public void setParentDocumentView(DocumentViewBase _parentDocumentView) {
+        this._parentDocumentView = _parentDocumentView;
+    }
 
 }

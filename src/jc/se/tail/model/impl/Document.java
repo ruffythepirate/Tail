@@ -17,30 +17,35 @@ import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import jc.se.tail.model.document.DocumentViewUpdatedArgs;
 
 /**
  *
  * @author ruffy
  */
-public class Document extends DocumentViewBase{
+public class Document extends DocumentViewBase {
 
     private File _wrappedFile;
     private int _numberOfLines;
     private List<RowInfo> _lineReadPositions;
+    private boolean _documentIsCached;
 
     public Document(File file) {
+        
         _wrappedFile = file;
         _lineReadPositions = new ArrayList<RowInfo>();
+        _documentLines = new ArrayList<>();
+
     }
 
     public IDocumentViewPortal getFilterView(String filterText, int linesBefore, int linesAfter) {
         return new DocumentFilterView(this, filterText, linesBefore, linesAfter);
     }
-    
+
     public IDocumentViewPortal getNormalView() {
         return new PlainDocumentViewPortal(this);
     }
-    
+
     public int getNumberOfLines() {
         return _numberOfLines;
     }
@@ -72,26 +77,46 @@ public class Document extends DocumentViewBase{
     }
 
     public List<String> getTextLines(int startLine) throws IOException {
-        long startPosition = getStartPositionOfLine(startLine);
-        List<String> lines = new ArrayList<String>();
-        try (RandomAccessFile reader = new RandomAccessFile(_wrappedFile, "r")) {
-            reader.seek(startPosition);
-            int lineNumber = startLine;
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (lineNumber >= startLine) {
-                    lines.add(line);
-                }
-                lineNumber++;
+
+        if (!_documentIsCached) {
+            while(startLine >= 0 && _documentLines.size() > startLine) {
+                _documentLines.remove(_documentLines.size()-1);
             }
+            long startPosition = getStartPositionOfLine(startLine);
+            List<String> lines = new ArrayList<String>();
+            try (RandomAccessFile reader = new RandomAccessFile(_wrappedFile, "r")) {
+                reader.seek(startPosition);
+                int lineNumber = startLine;
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (lineNumber >= startLine) {
+                        lines.add(line);
+                        _documentLines.add(line);
+                    }
+                    lineNumber++;
+                }
+            }
+            _documentIsCached = true;
+            return lines;
+        } else {
+            if (startLine > 0) {
+                List<String> returnArray = new ArrayList<String>();
+                for (int i = startLine; i < _documentLines.size(); i++) {
+                    returnArray.add(_documentLines.get(i));
+                }
+                return returnArray;
+            }
+            return _documentLines;
         }
-        return lines;
+
     }
 
     public void updateIsModified() {
-        
+        _documentIsCached = false;
+        clearCachedData();
+        DocumentViewUpdatedArgs eventArgs = new DocumentViewUpdatedArgs(0);
         setChanged();
-        notifyObservers();
+        notifyObservers(eventArgs);
     }
 
     /**
@@ -122,8 +147,8 @@ public class Document extends DocumentViewBase{
 
     private long getStartPositionOfLine(int startLine) {
         long startPosition = 0;
-        if (startLine-1 >= 0
-                && _lineReadPositions.size() > startLine-1) {
+        if (startLine - 1 >= 0
+                && _lineReadPositions.size() > startLine - 1) {
             startPosition = _lineReadPositions.get(startLine - 1).getRowEndPosition();
         }
         return startPosition;

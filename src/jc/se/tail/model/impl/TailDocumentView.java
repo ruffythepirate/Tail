@@ -7,30 +7,44 @@
 package jc.se.tail.model.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import jc.se.tail.model.document.DocumentViewUpdatedArgs;
 
 /**
  *
  * @author ruffy
  */
 public class TailDocumentView extends DocumentViewBase implements Observer{
-    private int _startLine;
-    
-    private int _numberOfLines;
-    
-    private DocumentViewBase _parentDocumentView;
+
     
     public TailDocumentView(DocumentViewBase parentDocument){
         _parentDocumentView = parentDocument;
         
-        
+        _documentLines = new ArrayList<String>();
     }
     
     @Override
     public List<String> getTextLines(int startLine) throws IOException {
-        return _parentDocumentView.getTextLines(startLine);
+
+        List<String> returnLines = _parentDocumentView.getTextLines(
+                Math.max(startLine, _documentLines.size()));
+        
+        for(String returnLine : returnLines) {
+            _documentLines.add(returnLine);
+        }
+
+        if(startLine > 0) {
+            List<String> returnArray = new ArrayList<String>();
+            for(int i = startLine; i < _documentLines.size(); i++) {
+                returnArray.add(_documentLines.get(i));
+            }
+            return returnArray;
+        }
+        
+        return _documentLines;
     }
 
     @Override
@@ -45,8 +59,16 @@ public class TailDocumentView extends DocumentViewBase implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
+        DocumentViewUpdatedArgs sendArgs;
+        if(arg instanceof DocumentViewUpdatedArgs)
+        {
+            sendArgs = new DocumentViewUpdatedArgs( ((DocumentViewUpdatedArgs) arg).getUpdatedFromViewLine());
+        } else {
+            sendArgs = new DocumentViewUpdatedArgs(0);
+        }
         setChanged();
-        notifyObservers();
+        notifyObservers(sendArgs);
+        
     }
     
     

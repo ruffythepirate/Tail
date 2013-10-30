@@ -7,18 +7,21 @@
 package jc.se.tail.model.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import jc.se.tail.model.document.DocumentViewUpdatedArgs;
 
 /**
  *
  * @author ruffy
  */
-public class SimpleDocumentView extends DocumentViewBase{
-
-    private DocumentViewBase _parentDocumentView;
+public class SimpleDocumentView extends DocumentViewBase implements Observer{
     
     public SimpleDocumentView(DocumentViewBase parentDocumentView){
         _parentDocumentView = parentDocumentView;
+        _documentLines = new ArrayList<>();
     }
     
     @Override
@@ -35,6 +38,19 @@ public class SimpleDocumentView extends DocumentViewBase{
     public int getViewPortalTotalRows() {
          return _parentDocumentView.getViewPortalTotalRows();
    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        DocumentViewUpdatedArgs sendArgs;
+        if(arg instanceof DocumentViewUpdatedArgs)
+        {
+            sendArgs = new DocumentViewUpdatedArgs( ((DocumentViewUpdatedArgs) arg).getUpdatedFromViewLine());
+        } else {
+            sendArgs = new DocumentViewUpdatedArgs(0);
+        }
+        setChanged();
+        notifyObservers(sendArgs);
+    }
     
     
 }

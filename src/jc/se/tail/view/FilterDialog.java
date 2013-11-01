@@ -65,6 +65,12 @@ public class FilterDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Rows Above");
 
+        _filterStringTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _filterStringTxtActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("Filter Text");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -129,6 +135,12 @@ public class FilterDialog extends javax.swing.JDialog {
         _shouldFilter = true;
         setVisible(false);
     }//GEN-LAST:event__filterBtnActionPerformed
+
+    private void _filterStringTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterStringTxtActionPerformed
+         _shouldFilter = true;
+        setVisible(false);       
+        // TODO add your handling code here:
+    }//GEN-LAST:event__filterStringTxtActionPerformed
 
     /**
      * @param args the command line arguments

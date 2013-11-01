@@ -157,7 +157,7 @@ public class TailWindow extends javax.swing.JFrame {
             boolean shouldFilter = settings.getShouldFilter();
             if (shouldFilter) {
                 //We create a filter for the current tab.
-                selectedPanel.setFilter(settings.getFilterText(),
+                selectedPanel.appendFilter(settings.getFilterText(),
                         settings.getRowsBefore(), settings.getRowsAfter());
             }
         }

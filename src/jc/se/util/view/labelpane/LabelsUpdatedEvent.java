@@ -10,19 +10,19 @@ package jc.se.util.view.labelpane;
  */
 public class LabelsUpdatedEvent {
     
-    private String _label;
+    private LabelItem _label;
     
     private String _eventType;
     
     public static String EVENT_LABEL_ADDED = "Added";
     public static String EVENT_LABEL_REMOVED = "Removed";
     
-    public LabelsUpdatedEvent(String label, String eventType) {
+    public LabelsUpdatedEvent(LabelItem label, String eventType) {
         _label = label;
         _eventType = eventType;
     }
 
-    public String getLabel() {
+    public LabelItem getLabel() {
         return _label;
     }
 

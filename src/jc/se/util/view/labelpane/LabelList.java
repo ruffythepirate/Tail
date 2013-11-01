@@ -14,33 +14,39 @@ import java.util.Observable;
  */
 public class LabelList extends Observable {
     
-    private List<String> _labels;
+    private List<LabelItem> _labels;
     
     public LabelList()  {
-        _labels = new ArrayList<String>( );
+        _labels = new ArrayList<LabelItem>( );
         
     }
     
-    public void addLabel(String label) {
+    public void addLabel(String text, Object tag) {
+        
+        LabelItem label = new LabelItem(text, tag);
+        
         if(!_labels.contains(label)) {
             getLabels().add(label);
             setChanged();
             LabelsUpdatedEvent event = new LabelsUpdatedEvent(label, LabelsUpdatedEvent.EVENT_LABEL_ADDED);
             notifyObservers(event);
+            clearChanged();
+
         }        
     }
     
-    public void removeLabel(String label) {
+    public void removeLabel(LabelItem label) {
         if(getLabels().contains(label)) {
             getLabels().remove(label);
             setChanged();
             
             LabelsUpdatedEvent event = new LabelsUpdatedEvent(label, LabelsUpdatedEvent.EVENT_LABEL_REMOVED);
             notifyObservers(event);
+            clearChanged();
         }
     }
 
-    public List<String> getLabels() {
+    public List<LabelItem> getLabels() {
         return _labels;
     }
     

@@ -8,12 +8,13 @@ package jc.se.tail.model.document;
 import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author ruffy
  */
-public abstract class DocumentViewBase extends Observable implements IDocumentViewPortal {
+public abstract class DocumentViewBase extends Observable implements IDocumentViewPortal, Observer {
 
     protected List<String> _documentLines;
     protected DocumentViewBase _parentDocumentView;
@@ -47,7 +48,15 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
      * @param _parentDocumentView the _parentDocumentView to set
      */
     public void setParentDocumentView(DocumentViewBase _parentDocumentView) {
+        if(_parentDocumentView != null) {
+            _parentDocumentView.deleteObserver(this);
+        }
+        
         this._parentDocumentView = _parentDocumentView;
+        _parentDocumentView.addObserver(this);
     }
+
+    @Override
+    public abstract void update(Observable o, Object arg) ;
 
 }

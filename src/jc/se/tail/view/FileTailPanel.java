@@ -24,9 +24,14 @@ import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentFilterView;
+import jc.se.tail.model.document.DocumentViewBase;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.IDocumentViewPortal;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
+import jc.se.util.view.labelpane.LabelItem;
+import jc.se.util.view.labelpane.LabelsUpdatedEvent;
 
 /**
  *
@@ -35,11 +40,25 @@ import jc.se.tail.model.impl.SearchResultHit;
 public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
-    private IDocumentViewPortal _documentViewPortal;
+
     private int _currentNumberOfShowedLines;
     private DefaultHighlighter.DefaultHighlightPainter _highlightPainter;
     private DefaultHighlighter.DefaultHighlightPainter _lineHighlightPainter;
     private SearchResult _currentSearchResult;
+
+    private DocumentViewBase _documentViewPortal;
+    private DocumentViewPackage _documentViewPackage;
+
+    private void recompileDocumentView() {
+
+        if (_documentViewPortal != null) {
+            _documentViewPortal.deleteObserver(this);
+        }
+
+        _documentViewPortal = _documentViewPackage.getCompiledView();
+        _documentViewPortal.addObserver(this);
+
+    }
 
     /**
      * Creates new form FileTailPanel
@@ -47,50 +66,83 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     public FileTailPanel(Document documentToTrack) {
         initComponents();
         doLayout();
+
+        _labelPane.getLabelList().addObserver(new Observer() {
+
+            @Override
+            public void update(Observable o, Object arg) {
+                if (arg instanceof LabelsUpdatedEvent) {
+                    LabelsUpdatedEvent event = (LabelsUpdatedEvent) arg;
+                    if (event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_REMOVED) {
+                        LabelItem labelItem = event.getLabel();
+                        if (labelItem.getTag() instanceof DocumentViewBase) {
+                            removeFilter((DocumentViewBase) labelItem.getTag());
+                        }
+                    }
+                }
+
+            }
+        });
+
         _documentToTrack = documentToTrack;
-        _documentViewPortal = documentToTrack.getNormalView();
-        _documentViewPortal.addObserver(this);
+        _documentViewPackage = new DocumentViewPackage(documentToTrack);
 
-        _highlightPainter =
-                new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+        recompileDocumentView();
 
-        _lineHighlightPainter =
-                new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
+        _highlightPainter
+                = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+
+        _lineHighlightPainter
+                = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 
         updateDisplayedDocumentText();
 
         _searchPane.setVisible(_showSearchBtn.isSelected());
-        
+
         registerActivateSearchHotKey();
-        
-        
+
     }
-    
-    public void setFilter(String filterText, int rowsBefore, int rowsAfter) {
-        _documentViewPortal.deleteObserver(this);
-        _documentViewPortal = _documentToTrack.getFilterView(filterText, rowsBefore, rowsAfter);
-        _documentViewPortal.addObserver(this);
-        
+
+    public void removeDocumentView(DocumentViewBase viewToRemove) {
+        _documentViewPackage.removeDocumentView(viewToRemove);
+
+        recompileDocumentView();
+        refreshDisplayedDocumentText();
+    }
+
+    public void appendFilter(String filterText, int rowsBefore, int rowsAfter) {
+
+        DocumentFilterView filterView = new DocumentFilterView(filterText, rowsBefore, rowsAfter);
+        _documentViewPackage.appendDocumentView(filterView);
+
+        recompileDocumentView();
+
+        refreshDisplayedDocumentText();
+    }
+
+    public void removeFilter(DocumentViewBase documentViewBase) {
+        _documentViewPackage.removeDocumentView(documentViewBase);
+        recompileDocumentView();
         refreshDisplayedDocumentText();
     }
 
     private void registerActivateSearchHotKey() {
         //Register serach hot key
-        AbstractAction activateSearchAction = new AbstractAction("activate search"){
+        AbstractAction activateSearchAction = new AbstractAction("activate search") {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 _showSearchBtn.setSelected(true);
                 _searchPane.setVisible(true);
                 _searchTxt.requestFocus();
-            }            
+            }
         };
-        
-        KeyStroke keyStroke = KeyStroke.getKeyStroke( KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK, false );
-        
+
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK, false);
+
         this.getActionMap().put("activate search", activateSearchAction);
         _fileContentTxt.getActionMap().put("activate search", activateSearchAction);
-        
+
         this.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
         _fileContentTxt.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
     }
@@ -110,10 +162,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _fileContentTxt.setCaretPosition(hitToScrollTo.getHitStart());
     }
 
-    private void clearHighlighting(){
+    private void clearHighlighting() {
         _fileContentTxt.getHighlighter().removeAllHighlights();
     }
-    
+
     private void scrollToPreviousSearchHit() {
         if (_currentSearchResult != null) {
             int caretPosition = _fileContentTxt.getCaretPosition();
@@ -317,15 +369,26 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private void _addFilterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__addFilterBtnActionPerformed
 
-            FilterDialog settings = new FilterDialog(null, true);
-            settings.setVisible(true);
-            boolean shouldFilter = settings.getShouldFilter();
-            if (shouldFilter) {
-                _labelPane.getLabelList().addLabel(settings.getFilterText());
-                _labelContainerPane.invalidate();
-                _labelPane.repaint();
-                repaint();
-            }
+        FilterDialog settings = new FilterDialog(null, true);
+        settings.setVisible(true);
+        boolean shouldFilter = settings.getShouldFilter();
+        if (shouldFilter) {
+
+            DocumentFilterView filterView = new DocumentFilterView(
+                    settings.getFilterText(),
+                    settings.getRowsBefore(),
+                    settings.getRowsAfter());
+
+            _labelPane.getLabelList().addLabel(settings.getFilterText(), filterView);
+
+            _documentViewPackage.appendDocumentView(filterView);
+
+            recompileDocumentView();
+            refreshDisplayedDocumentText();
+            _labelContainerPane.invalidate();
+            _labelPane.repaint();
+            repaint();
+        }
     }//GEN-LAST:event__addFilterBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -359,7 +422,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _currentNumberOfShowedLines = 0;
         updateDisplayedDocumentText();
     }
-    
+
     private void updateDisplayedDocumentText() {
         try {
             String newline = System.getProperty("line.separator");
@@ -445,7 +508,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 _currentSearchResult.addSearchHit(rowNumber,
                         nextIndex,
                         nextIndex + searchText.length());
-                if(rowNumber > lastRow) {
+                if (rowNumber > lastRow) {
                     numberOfRows++;
                     lastRow = rowNumber;
                 }
@@ -456,11 +519,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             nextIndex = allContent.indexOf(searchText, nextIndex + 1);
         }
         updateSearchResultLabels(numberOfRows);
-        
+
     }
-    
-    private void clearSearchResult()
-    {
+
+    private void clearSearchResult() {
         _currentSearchResult = null;
         updateSearchResultLabels(0);
         clearHighlighting();
@@ -468,11 +530,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private void updateSearchResultLabels(int numberOfRows) {
         _resultRowsLbl.setText("Total Rows: " + numberOfRows);
-        if(_currentSearchResult != null)
-        {
+        if (_currentSearchResult != null) {
             _resultHitsLbl.setText("Total Hits: " + _currentSearchResult.getSearchHits().size());
         } else {
-            _resultHitsLbl.setText("Total Hits: 0");            
+            _resultHitsLbl.setText("Total Hits: 0");
         }
     }
 

@@ -6,7 +6,9 @@ package jc.se.util.view.labelpane;
 
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JLabel;
@@ -21,6 +23,8 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
     
     private List<JLabel> _labelComponents;
     
+    private Map<JLabel, LabelItem> _itemDictionary;
+    
     /**
      * Creates new form LabelPane
      */
@@ -28,6 +32,8 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
         initComponents();
         
         setLayout(new FlowLayout());
+        
+        _itemDictionary = new HashMap<JLabel, LabelItem>();
         
         _labelList = new LabelList();
         
@@ -64,8 +70,10 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
 
     @Override
     public void update(Observable o, Object arg) {
+        try {
         if(arg instanceof LabelsUpdatedEvent) {
             LabelsUpdatedEvent event = (LabelsUpdatedEvent) arg;
+            
             if(event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_ADDED) {
                 addLabel(event.getLabel());
             } else if(event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_REMOVED) {
@@ -73,27 +81,41 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
             }
 
         }
+        }
+        catch(Exception ex){
+            
+        }
     }
     
-    private void addLabel(String label) {
-        JLabel newLabel = new JLabel(label);
+    private void addLabel(LabelItem label) {
+        
+        JLabel newLabel = new JLabel(label.getText());
         newLabel.setVisible(true);
         _labelComponents.add(newLabel);
+        _itemDictionary.put(newLabel, label);
+
          newLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JLabel eventSender = (JLabel) evt.getComponent();
-                getLabelList().removeLabel(eventSender.getText());
+                
+                LabelItem labelItem = _itemDictionary.get(eventSender);
+                        
+                getLabelList().removeLabel(labelItem);
             }
         });
         add(newLabel);
         revalidate();
    }
     
-    private void removeLabel(String label) {
+    private void removeLabel(LabelItem label) {
         for(JLabel addedLabel : _labelComponents) {
-            if(addedLabel.getText() == label) {
+            
+            LabelItem labelItem = _itemDictionary.get(addedLabel);
+            if(labelItem == label) {
+                
                 _labelComponents.remove(addedLabel);
                 remove(addedLabel);
+                _itemDictionary.remove(addedLabel);
                 break;
             }
         }

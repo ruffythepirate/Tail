@@ -24,22 +24,25 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     private String _filterString;
     private int _rowsAbove;
     private int _rowsAfter;
-    
-    private Document _document;
-    
+        
     public DocumentFilterView(Document document, String filterString, int rowsAbove, int rowsAfter) {
         _filterString = filterString;
         _rowsAbove = rowsAbove;
         _rowsAfter = rowsAfter;
-        _document = document;
         
-        document.addObserver(this);
+        setParentDocumentView(document);
 
+    }
+    
+    public DocumentFilterView(String filterString, int rowsAbove, int rowsAfter) {
+        _filterString = filterString;
+        _rowsAbove = rowsAbove;
+        _rowsAfter = rowsAfter;
     }
 
     @Override
     public List<String> getTextLines(int startLine) throws IOException {
-        List<String> documentLines = _document.getTextLines(startLine - _rowsAbove);
+        List<String> documentLines = _parentDocumentView.getTextLines(startLine - _rowsAbove);
         
         List<String> filteredDocumentRows = new ArrayList<String>();
         
@@ -70,12 +73,15 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
 
     @Override
     public int getDocumentTotalRows() {
-        return _document.getNumberOfLines();
+        if(_parentDocumentView != null) {
+        return _parentDocumentView.getDocumentTotalRows();
+        }
+        return 0;
     }
 
     @Override
     public int getViewPortalTotalRows() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0;
     }    
 
     @Override

@@ -28,6 +28,7 @@ import jc.se.tail.model.document.DocumentFilterView;
 import jc.se.tail.model.document.DocumentViewBase;
 import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.IDocumentViewPortal;
+import jc.se.tail.model.document.RegularExpressionView;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
 import jc.se.util.view.labelpane.LabelItem;
@@ -108,6 +109,17 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         recompileDocumentView();
         refreshDisplayedDocumentText();
+    }
+    
+    public void appendReformat(String searchText, String replacementText) {
+        RegularExpressionView regularExpressionView = new RegularExpressionView(searchText, replacementText);
+        
+        _documentViewPackage.appendDocumentView(regularExpressionView);
+
+        recompileDocumentView();
+
+        refreshDisplayedDocumentText();
+    
     }
 
     public void appendFilter(String filterText, int rowsBefore, int rowsAfter) {

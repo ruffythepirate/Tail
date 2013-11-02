@@ -23,10 +23,22 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
     public abstract List<String> getTextLines(int startLine) throws IOException;
 
     @Override
-    public abstract int getDocumentTotalRows();
+    public int getDocumentTotalRows(){
+                if(_parentDocumentView != null) {
+        return _parentDocumentView.getDocumentTotalRows();
+        }
+        return 0;
+
+    }
 
     @Override
-    public abstract int getViewPortalTotalRows();
+    public int getViewPortalTotalRows() {
+      if(_parentDocumentView != null) {
+        return _parentDocumentView.getViewPortalTotalRows();
+        }
+        return 0;
+
+    }
 
     public void clearCachedData()
     {

@@ -49,6 +49,7 @@ public class TailWindow extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         _searchMenuItem = new javax.swing.JMenuItem();
         _filterMenuItem = new javax.swing.JMenuItem();
+        _reformatRowsMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -99,6 +100,15 @@ public class TailWindow extends javax.swing.JFrame {
             }
         });
         jMenu3.add(_filterMenuItem);
+
+        _reformatRowsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        _reformatRowsMenuItem.setText("Reformat Rows");
+        _reformatRowsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _reformatRowsMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu3.add(_reformatRowsMenuItem);
 
         jMenuBar1.add(jMenu3);
 
@@ -183,6 +193,25 @@ public class TailWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event__searchMenuItemActionPerformed
 
+    private void _reformatRowsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__reformatRowsMenuItemActionPerformed
+
+        FileTailPanel selectedPanel = getActiveFilePane();
+
+        if (selectedPanel != null) {
+            RegularExpressionDialog settings = new RegularExpressionDialog(this, true);
+
+            settings.setVisible(true);
+
+            boolean shouldFilter = settings.isShouldFilter();
+            if (shouldFilter) {
+                //We create a filter for the current tab.
+                selectedPanel.appendReformat(
+                        settings.getSearchText(),
+                        settings.getReplacementText());
+            }
+        }
+    }//GEN-LAST:event__reformatRowsMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -220,6 +249,7 @@ public class TailWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser _fileChooser;
     private javax.swing.JMenuItem _filterMenuItem;
+    private javax.swing.JMenuItem _reformatRowsMenuItem;
     private javax.swing.JMenuItem _searchMenuItem;
     private javax.swing.JTabbedPane _tabbedPane;
     private javax.swing.JMenu jMenu1;

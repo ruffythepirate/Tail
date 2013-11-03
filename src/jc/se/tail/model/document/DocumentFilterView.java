@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,9 +23,9 @@ import java.util.Queue;
  */
 public class DocumentFilterView extends DocumentViewBase implements Observer{
     
-    private String _filterString;
-    private int _rowsAbove;
-    private int _rowsAfter;
+    protected String _filterString;
+    protected int _rowsAbove;
+    protected int _rowsAfter;
         
     public DocumentFilterView(Document document, String filterString, int rowsAbove, int rowsAfter) {
         _filterString = filterString;
@@ -39,10 +41,13 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
         _rowsAbove = rowsAbove;
         _rowsAfter = rowsAfter;
     }
+    
+    public DocumentFilterView(){
+    }
 
     @Override
     public List<String> getTextLines(int startLine) throws IOException {
-        List<String> documentLines = _parentDocumentView.getTextLines(startLine - _rowsAbove);
+        List<String> documentLines = _parentDocumentView.getTextLines(startLine - getRowsAbove());
         
         List<String> filteredDocumentRows = new ArrayList<String>();
         
@@ -50,7 +55,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
         
         for(int i = 0; i< documentLines.size(); i++) {
             String line = documentLines.get(i);
-            if(line.indexOf(_filterString) > -1){
+            if(line.indexOf(getFilterString()) > -1){
                 rowsPartOfFilter.add(i);
             }
         }
@@ -61,12 +66,14 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
             if(nextIndex != null && i == nextIndex) {
                 filteredDocumentRows.add(documentLines.get(i));
                 nextIndex = rowsPartOfFilter.poll();
-            } else if( (lastIndex != null && i <= lastIndex + _rowsAfter)
-                    || (nextIndex != null && i >= nextIndex - _rowsAbove)) 
+            } else if( (lastIndex != null && i <= lastIndex + getRowsAfter())
+                    || (nextIndex != null && i >= nextIndex - getRowsAbove())) 
             {
                 filteredDocumentRows.add(documentLines.get(i));
             }
         }
+        
+        _documentLines = filteredDocumentRows;
         
         return filteredDocumentRows;
     }
@@ -81,13 +88,62 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
 
     @Override
     public int getViewPortalTotalRows() {
-        return 0;
+        if(_documentLines == null ) {
+            try {
+                getTextLines(0);
+            } catch (IOException ex) {
+                Logger.getLogger(DocumentFilterView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return _documentLines.size();
     }    
 
     @Override
     public void update(Observable o, Object arg) {
         setChanged();
         notifyObservers();
+    }
+
+    /**
+     * @return the _filterString
+     */
+    public String getFilterString() {
+        return _filterString;
+    }
+
+    /**
+     * @param _filterString the _filterString to set
+     */
+    public void setFilterString(String _filterString) {
+        this._filterString = _filterString;
+    }
+
+    /**
+     * @return the _rowsAbove
+     */
+    public int getRowsAbove() {
+        return _rowsAbove;
+    }
+
+    /**
+     * @param _rowsAbove the _rowsAbove to set
+     */
+    public void setRowsAbove(int _rowsAbove) {
+        this._rowsAbove = _rowsAbove;
+    }
+
+    /**
+     * @return the _rowsAfter
+     */
+    public int getRowsAfter() {
+        return _rowsAfter;
+    }
+
+    /**
+     * @param _rowsAfter the _rowsAfter to set
+     */
+    public void setRowsAfter(int _rowsAfter) {
+        this._rowsAfter = _rowsAfter;
     }
    
     

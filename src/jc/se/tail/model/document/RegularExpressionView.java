@@ -21,10 +21,14 @@ import java.util.regex.Pattern;
  */
 public class RegularExpressionView extends DocumentViewBase implements Observer{
     
-    private String _replaceString;
+    protected String _replaceString;
     
-    private Pattern _regexExpression;
-           
+    protected Pattern _regexExpression;
+
+    public RegularExpressionView() {
+        
+    }
+    
     public RegularExpressionView(String regexString, String replaceString) {
         _replaceString = replaceString;
         
@@ -38,7 +42,7 @@ public class RegularExpressionView extends DocumentViewBase implements Observer{
         List<String> returnRows = new ArrayList<String>();
         
         for(String line : documentLines) {
-            String filteredRow = _regexExpression.matcher(line).replaceAll(_replaceString);
+            String filteredRow = getRegexExpression().matcher(line).replaceAll(getReplaceString());
             returnRows.add(filteredRow);
             
         }
@@ -50,6 +54,34 @@ public class RegularExpressionView extends DocumentViewBase implements Observer{
     public void update(Observable o, Object arg) {
         setChanged();
         notifyObservers();
+    }
+
+    /**
+     * @return the _replaceString
+     */
+    public String getReplaceString() {
+        return _replaceString;
+    }
+
+    /**
+     * @param _replaceString the _replaceString to set
+     */
+    public void setReplaceString(String _replaceString) {
+        this._replaceString = _replaceString;
+    }
+
+    /**
+     * @return the _regexExpression
+     */
+    public Pattern getRegexExpression() {
+        return _regexExpression;
+    }
+
+    /**
+     * @param regexExpression the _regexExpression to set
+     */
+    public void setRegexExpression(String regexExpression) {
+        this._regexExpression = Pattern.compile(regexExpression);
     }
    
     

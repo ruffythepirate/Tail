@@ -3,27 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package jc.se.tail.model.document;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author ruffy
  */
-public class DocumentFilterViewTest {
-
-    public DocumentFilterViewTest() {
-    }
-
-    DocumentViewMock _parent;
-    private DocumentFilterView _target;
+public class RegularExpressionViewTest {
+       DocumentViewMock _parent;
+    private RegularExpressionView _target;
 
     @Before
     public void setUp() {
@@ -31,7 +25,7 @@ public class DocumentFilterViewTest {
         _parent = new DocumentViewMock() {
         };
 
-        _target = new DocumentFilterView();
+        _target = new RegularExpressionView();
         _target.setParentDocumentView(_parent);
     }
 
@@ -48,24 +42,30 @@ public class DocumentFilterViewTest {
 
         _parent.setText(getTestString());
 
-        _target.setFilterString("This");
+        _target.setRegexExpression("is a");
+        _target.setReplaceString("BAM");        
 
         List<String> filteredStrings = _target.getTextLines(0);
 
-        assertEquals(1, filteredStrings.size());
-        assertEquals("This is a lot", filteredStrings.get(0));
+        assertEquals(3, filteredStrings.size());
+        assertEquals("This BAM lot", filteredStrings.get(0));
 
     }
-
+    
     @Test
-    public void testGetDocumentTotalRows() {
-        System.out.println("getDocumentTotalRows");
+    public void testUseReplacementExpression() throws Exception {
+        System.out.println("getTextLines");
 
         _parent.setText(getTestString());
 
-        _target.setFilterString("This");
+        _target.setRegexExpression("This (.+) lot");
+        _target.setReplaceString("lot $1 This");        
 
-        assertEquals(_parent.getDocumentTotalRows(), _target.getDocumentTotalRows());
+        List<String> filteredStrings = _target.getTextLines(0);
+
+        assertEquals(3, filteredStrings.size());
+        assertEquals("lot is a This", filteredStrings.get(0));
+
     }
 
     @Test
@@ -73,8 +73,9 @@ public class DocumentFilterViewTest {
         System.out.println("getViewPortalTotalRows");
         _parent.setText(getTestString());
 
-        _target.setFilterString("This");
+        _target.setRegexExpression("This");
+        _target.setReplaceString("This");
 
-        assertEquals(1, _target.getViewPortalTotalRows());
+        assertEquals(_parent.getViewPortalTotalRows(), _target.getViewPortalTotalRows());
     }
 }

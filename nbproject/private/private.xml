@@ -18,6 +18,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/DocumentManager.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/DocumentFilterViewTest.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/RegularExpressionDialog.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/TailWindow.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/FilterDialog.java</file>

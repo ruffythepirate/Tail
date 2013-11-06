@@ -27,6 +27,7 @@ import jc.se.tail.model.document.Document;
 import jc.se.tail.model.document.DocumentFilterView;
 import jc.se.tail.model.document.DocumentViewBase;
 import jc.se.tail.model.document.DocumentViewPackage;
+import jc.se.tail.model.document.DocumentViewPackageCommunicator;
 import jc.se.tail.model.document.IDocumentViewPortal;
 import jc.se.tail.model.document.RegularExpressionView;
 import jc.se.tail.model.impl.SearchResult;
@@ -48,7 +49,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private SearchResult _currentSearchResult;
 
     private DocumentViewBase _documentViewPortal;
-    private DocumentViewPackage _documentViewPackage;
+    private DocumentViewPackageCommunicator _documentViewPackage;
 
     private void recompileDocumentView() {
 
@@ -86,8 +87,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         });
 
         _documentToTrack = documentToTrack;
-        _documentViewPackage = new DocumentViewPackage(documentToTrack);
+        _documentViewPackage = new DocumentViewPackageCommunicator(documentToTrack);
 
+        _labelPane.setLabelList( _documentViewPackage.getLabelList());
+        
         recompileDocumentView();
 
         _highlightPainter

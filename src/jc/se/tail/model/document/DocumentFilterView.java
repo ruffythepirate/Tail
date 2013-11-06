@@ -79,6 +79,11 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     }
 
     @Override
+    public String getViewTitle() {
+        return "F: " + _filterString;
+    }
+    
+    @Override
     public int getDocumentTotalRows() {
         if(_parentDocumentView != null) {
         return _parentDocumentView.getDocumentTotalRows();

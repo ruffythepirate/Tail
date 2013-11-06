@@ -47,6 +47,11 @@ public class TailDocumentView extends DocumentViewBase implements Observer{
         return _documentLines;
     }
 
+            @Override
+    public String getViewTitle() {
+        return "Tail";
+    }
+    
     @Override
     public int getDocumentTotalRows() {
          return _parentDocumentView.getDocumentTotalRows();

@@ -39,6 +39,12 @@ public class SimpleDocumentView extends DocumentViewBase implements Observer{
          return _parentDocumentView.getViewPortalTotalRows();
    }
 
+        @Override
+    public String getViewTitle() {
+        return "Simple";
+    }
+
+    
     @Override
     public void update(Observable o, Object arg) {
         DocumentViewUpdatedArgs sendArgs;

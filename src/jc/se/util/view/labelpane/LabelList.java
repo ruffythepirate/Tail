@@ -21,8 +21,7 @@ public class LabelList extends Observable {
         
     }
     
-    public void addLabel(String text, Object tag) {
-        
+    public LabelItem addLabel(String text, Object tag) {        
         LabelItem label = new LabelItem(text, tag);
         
         if(!_labels.contains(label)) {
@@ -31,8 +30,9 @@ public class LabelList extends Observable {
             LabelsUpdatedEvent event = new LabelsUpdatedEvent(label, LabelsUpdatedEvent.EVENT_LABEL_ADDED);
             notifyObservers(event);
             clearChanged();
-
+            return label;
         }        
+        return null;
     }
     
     public void removeLabel(LabelItem label) {

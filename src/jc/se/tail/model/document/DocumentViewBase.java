@@ -48,6 +48,9 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
         }
     }
     
+    public String getViewTitle() {
+        return "Base";
+    }
     
     /**
      * @return the _parentDocumentView

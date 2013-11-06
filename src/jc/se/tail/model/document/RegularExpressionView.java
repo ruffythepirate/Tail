@@ -36,6 +36,13 @@ public class RegularExpressionView extends DocumentViewBase implements Observer{
     }
 
     @Override
+    public String getViewTitle() {
+        return "Regex: " + getRegexExpression().toString();
+    }
+
+    
+    
+    @Override
     public List<String> getTextLines(int startLine) throws IOException {
         List<String> documentLines = _parentDocumentView.getTextLines(startLine);
         

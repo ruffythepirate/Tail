@@ -19,11 +19,13 @@ import javax.swing.JLabel;
  */
 public class LabelPane extends javax.swing.JPanel implements Observer{
 
-    private LabelList _labelList;
+    protected LabelList _labelList;
     
     private List<JLabel> _labelComponents;
     
     private Map<JLabel, LabelItem> _itemDictionary;
+    
+    private Observable _requestLabelAction;
     
     /**
      * Creates new form LabelPane
@@ -34,10 +36,8 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
         setLayout(new FlowLayout());
         
         _itemDictionary = new HashMap<JLabel, LabelItem>();
-        
-        _labelList = new LabelList();
-        
-        _labelList.addObserver(this);
+
+        setLabelList(new LabelList());
         
         _labelComponents = new ArrayList<JLabel>();
     }
@@ -124,6 +124,20 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
 
     public LabelList getLabelList() {
         return _labelList;
+    }
+
+    /**
+     * @param _labelList the _labelList to set
+     */
+    public void setLabelList(LabelList _labelList) {
+
+        if(_labelList != null) {
+            _labelList.deleteObserver(this);
+        }
+        this._labelList = _labelList;
+        
+        _labelList.addObserver(this);
+
     }
     
 }

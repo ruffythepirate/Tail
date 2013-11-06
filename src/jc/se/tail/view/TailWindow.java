@@ -4,15 +4,24 @@
  */
 package jc.se.tail.view;
 
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.manager.DocumentManager;
 import jc.se.tail.model.document.Document;
+import jc.se.util.view.TabCloseActionHandler;
 
 /**
  *
@@ -29,6 +38,27 @@ public class TailWindow extends javax.swing.JFrame {
         initComponents();
 
         _documentManager = new DocumentManager();
+    }
+
+    private class CloseFileTabActionHandler extends TabCloseActionHandler {
+
+        Document _document;
+        
+        public CloseFileTabActionHandler(JTabbedPane tabbedPane, Component tabComponent, Document document) {
+            super(tabbedPane, tabComponent);
+            _document = document;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            super.actionPerformed(evt);
+            try {
+                //Unregisters listener for the document.
+                _documentManager.stopTrackDocument(_document);
+            } catch (Exception ex) {
+                Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**
@@ -138,8 +168,10 @@ public class TailWindow extends javax.swing.JFrame {
                 Document document = new Document(selectedFile);
                 try {
                     _documentManager.startTrackDocument(document);
+
                     FileTailPanel filePanel = new FileTailPanel(document);
-                    _tabbedPane.addTab(selectedFile.getName(), filePanel);
+                    addClosableTabbedPane(selectedFile, filePanel);
+
                 } catch (IOException ex) {
                     Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
@@ -151,6 +183,31 @@ public class TailWindow extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void addClosableTabbedPane(File selectedFile, FileTailPanel filePanel) {
+        _tabbedPane.addTab(selectedFile.getName(), null, filePanel, selectedFile.getAbsolutePath());
+
+        int index = _tabbedPane.indexOfComponent(filePanel);
+        JPanel pnlTab = new JPanel(new GridBagLayout());
+        pnlTab.setOpaque(false);
+        JLabel lblTitle = new JLabel(selectedFile.getName());
+        JButton btnClose = new JButton("x");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+
+        pnlTab.add(lblTitle, gbc);
+
+        gbc.gridx++;
+        gbc.weightx = 0;
+        pnlTab.add(btnClose, gbc);
+
+        _tabbedPane.setTabComponentAt(index, pnlTab);
+
+        btnClose.addActionListener(new TabCloseActionHandler(_tabbedPane, filePanel));
+    }
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
@@ -185,9 +242,9 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchMenuItemActionPerformed
         FileTailPanel selectedPanel = getActiveFilePane();
-        if(selectedPanel != null) {
-            Action searchAction =  selectedPanel.getActionMap().get("activate search");
-            if(searchAction != null) {
+        if (selectedPanel != null) {
+            Action searchAction = selectedPanel.getActionMap().get("activate search");
+            if (searchAction != null) {
                 searchAction.actionPerformed(null);
             }
         }

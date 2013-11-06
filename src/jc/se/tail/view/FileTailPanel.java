@@ -6,6 +6,9 @@ package jc.se.tail.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -89,8 +92,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _documentToTrack = documentToTrack;
         _documentViewPackage = new DocumentViewPackageCommunicator(documentToTrack);
 
-        _labelPane.setLabelList( _documentViewPackage.getLabelList());
-        
+        _labelPane.setLabelList(_documentViewPackage.getLabelList());
+
         recompileDocumentView();
 
         _highlightPainter
@@ -113,16 +116,16 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         recompileDocumentView();
         refreshDisplayedDocumentText();
     }
-    
+
     public void appendReformat(String searchText, String replacementText) {
         RegularExpressionView regularExpressionView = new RegularExpressionView(searchText, replacementText);
-        
+
         _documentViewPackage.appendDocumentView(regularExpressionView);
 
         recompileDocumentView();
 
         refreshDisplayedDocumentText();
-    
+
     }
 
     public void appendFilter(String filterText, int rowsBefore, int rowsAfter) {
@@ -201,10 +204,12 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        _topPane = new javax.swing.JPanel();
         _toolBarPane = new javax.swing.JPanel();
         _tailFileEnd = new javax.swing.JToggleButton();
         _showSearchBtn = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
+        _toClipboardBtn = new javax.swing.JButton();
         _labelContainerPane = new javax.swing.JPanel();
         _addFilterBtn = new javax.swing.JButton();
         _labelPane = new jc.se.util.view.labelpane.LabelPane();
@@ -219,6 +224,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _fileContentTxt = new javax.swing.JTextArea();
 
         setLayout(new java.awt.BorderLayout());
+
+        _topPane.setLayout(new java.awt.GridLayout(2, 0));
 
         _toolBarPane.setMinimumSize(new java.awt.Dimension(49, 0));
         _toolBarPane.setLayout(new javax.swing.BoxLayout(_toolBarPane, javax.swing.BoxLayout.LINE_AXIS));
@@ -252,7 +259,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         jButton1.setText("Refresh");
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setMaximumSize(new java.awt.Dimension(31, 23));
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,6 +266,17 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             }
         });
         _toolBarPane.add(jButton1);
+
+        _toClipboardBtn.setText("To Clipboard");
+        _toClipboardBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _toClipboardBtnActionPerformed(evt);
+            }
+        });
+        _toolBarPane.add(_toClipboardBtn);
+
+        _topPane.add(_toolBarPane);
+        _toolBarPane.getAccessibleContext().setAccessibleName("");
 
         _labelContainerPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 204)));
         _labelContainerPane.setMaximumSize(new java.awt.Dimension(2147483647, 20));
@@ -277,10 +294,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _labelPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
         _labelContainerPane.add(_labelPane, java.awt.BorderLayout.CENTER);
 
-        _toolBarPane.add(_labelContainerPane);
+        _topPane.add(_labelContainerPane);
 
-        add(_toolBarPane, java.awt.BorderLayout.NORTH);
-        _toolBarPane.getAccessibleContext().setAccessibleName("");
+        add(_topPane, java.awt.BorderLayout.PAGE_START);
 
         _searchPane.setLayout(new javax.swing.BoxLayout(_searchPane, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -406,6 +422,13 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         }
     }//GEN-LAST:event__addFilterBtnActionPerformed
 
+    private void _toClipboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__toClipboardBtnActionPerformed
+        String allText  = _fileContentTxt.getText();
+        StringSelection stringSelection = new StringSelection(allText);
+        Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clpbrd.setContents(stringSelection, null);
+    }//GEN-LAST:event__toClipboardBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _addFilterBtn;
     private javax.swing.JTextArea _fileContentTxt;
@@ -420,7 +443,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JTextField _searchTxt;
     private javax.swing.JToggleButton _showSearchBtn;
     private javax.swing.JToggleButton _tailFileEnd;
+    private javax.swing.JButton _toClipboardBtn;
     private javax.swing.JPanel _toolBarPane;
+    private javax.swing.JPanel _topPane;
     private javax.swing.JButton jButton1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables

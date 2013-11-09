@@ -19,6 +19,8 @@ import javax.swing.JLabel;
  */
 public class LabelPane extends javax.swing.JPanel implements Observer{
 
+    
+    protected ILabelController _controller;
     protected LabelList _labelList;
     
     private List<JLabel> _labelComponents;
@@ -99,8 +101,7 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
                 JLabel eventSender = (JLabel) evt.getComponent();
                 
                 LabelItem labelItem = _itemDictionary.get(eventSender);
-                        
-                getLabelList().removeLabel(labelItem);
+                _controller.RemoveLabel(labelItem);
             }
         });
         add(newLabel);
@@ -120,6 +121,7 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
             }
         }
         revalidate();
+        repaint();
     }
 
     public LabelList getLabelList() {
@@ -138,6 +140,20 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
         
         _labelList.addObserver(this);
 
+    }
+
+    /**
+     * @return the _controller
+     */
+    public ILabelController getController() {
+        return _controller;
+    }
+
+    /**
+     * @param _controller the _controller to set
+     */
+    public void setController(ILabelController _controller) {
+        this._controller = _controller;
     }
     
 }

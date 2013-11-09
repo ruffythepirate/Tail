@@ -6,6 +6,7 @@
 
 package jc.se.tail.model.document;
 
+import jc.se.tail.model.document.view.DocumentViewBase;
 import java.util.HashMap;
 import java.util.Map;
 import jc.se.util.view.labelpane.LabelItem;

@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jc.se.tail.model.document;
+package jc.se.tail.model.document.view;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import jc.se.tail.model.document.IDocumentViewPortal;
 
 /**
  *
@@ -18,6 +20,10 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
 
     protected List<String> _documentLines;
     protected DocumentViewBase _parentDocumentView;
+    
+    public DocumentViewBase() {
+        _documentLines = new ArrayList<>();
+    }
     
     @Override
     public abstract List<String> getTextLines(int startLine) throws IOException;
@@ -67,8 +73,19 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
             _parentDocumentView.deleteObserver(this);
         }
         
-        this._parentDocumentView = _parentDocumentView;
+        this._parentDocumentView = _parentDocumentView;        
         _parentDocumentView.addObserver(this);
+        InvalidateText(0);        
+    }
+
+    protected void InvalidateText(int fromLine) {
+        while(_documentLines.size() > fromLine) {
+            _documentLines.remove(fromLine -1 );
+        }
+        _documentLines.clear();
+        DocumentViewUpdatedArgs event = new DocumentViewUpdatedArgs(fromLine);
+        setChanged();
+        notifyObservers(event);
     }
 
     @Override

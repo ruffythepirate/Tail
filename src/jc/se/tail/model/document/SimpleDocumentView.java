@@ -6,12 +6,13 @@
 
 package jc.se.tail.model.document;
 
+import jc.se.tail.model.document.view.DocumentViewBase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import jc.se.tail.model.document.DocumentViewUpdatedArgs;
+import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 
 /**
  *

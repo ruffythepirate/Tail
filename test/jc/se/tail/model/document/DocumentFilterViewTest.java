@@ -5,6 +5,7 @@
  */
 package jc.se.tail.model.document;
 
+import jc.se.tail.model.document.view.DocumentFilterView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

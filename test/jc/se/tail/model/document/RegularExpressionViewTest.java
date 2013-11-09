@@ -6,6 +6,7 @@
 
 package jc.se.tail.model.document;
 
+import jc.se.tail.model.document.view.RegularExpressionView;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;

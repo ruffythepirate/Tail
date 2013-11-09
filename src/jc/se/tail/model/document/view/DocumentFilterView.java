@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jc.se.tail.model.document;
+package jc.se.tail.model.document.view;
 
 import jc.se.tail.model.document.Document;
 import java.io.IOException;
@@ -16,6 +16,7 @@ import java.util.Observer;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jc.se.tail.model.document.Document;
 
 /**
  *
@@ -28,6 +29,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     protected int _rowsAfter;
         
     public DocumentFilterView(Document document, String filterString, int rowsAbove, int rowsAfter) {
+        super();
         _filterString = filterString;
         _rowsAbove = rowsAbove;
         _rowsAfter = rowsAfter;
@@ -37,12 +39,14 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     }
     
     public DocumentFilterView(String filterString, int rowsAbove, int rowsAfter) {
+        super();
         _filterString = filterString;
         _rowsAbove = rowsAbove;
         _rowsAfter = rowsAfter;
     }
     
     public DocumentFilterView(){
+        super();
     }
 
     @Override

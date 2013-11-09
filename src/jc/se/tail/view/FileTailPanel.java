@@ -26,13 +26,14 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+import jc.se.tail.controller.FilterLabelController;
 import jc.se.tail.model.document.Document;
-import jc.se.tail.model.document.DocumentFilterView;
-import jc.se.tail.model.document.DocumentViewBase;
+import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.DocumentViewBase;
 import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.DocumentViewPackageCommunicator;
 import jc.se.tail.model.document.IDocumentViewPortal;
-import jc.se.tail.model.document.RegularExpressionView;
+import jc.se.tail.model.document.view.RegularExpressionView;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
 import jc.se.util.view.labelpane.LabelItem;
@@ -53,17 +54,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private DocumentViewBase _documentViewPortal;
     private DocumentViewPackageCommunicator _documentViewPackage;
-
-    private void recompileDocumentView() {
-
-        if (_documentViewPortal != null) {
-            _documentViewPortal.deleteObserver(this);
-        }
-
-        _documentViewPortal = _documentViewPackage.getCompiledView();
-        _documentViewPortal.addObserver(this);
-
-    }
+    
 
     /**
      * Creates new form FileTailPanel
@@ -72,6 +63,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         initComponents();
         doLayout();
 
+        
         _labelPane.getLabelList().addObserver(new Observer() {
 
             @Override
@@ -92,9 +84,13 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _documentToTrack = documentToTrack;
         _documentViewPackage = new DocumentViewPackageCommunicator(documentToTrack);
 
-        _labelPane.setLabelList(_documentViewPackage.getLabelList());
+        _documentViewPortal = _documentViewPackage.getPackageResultView();
+        _documentViewPortal.addObserver(this);
+        
+        FilterLabelController labelController = new FilterLabelController(_documentViewPackage);
+        _labelPane.setController(labelController);
 
-        recompileDocumentView();
+        _labelPane.setLabelList(_documentViewPackage.getLabelList());
 
         _highlightPainter
                 = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
@@ -113,7 +109,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     public void removeDocumentView(DocumentViewBase viewToRemove) {
         _documentViewPackage.removeDocumentView(viewToRemove);
 
-        recompileDocumentView();
         refreshDisplayedDocumentText();
     }
 
@@ -121,8 +116,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         RegularExpressionView regularExpressionView = new RegularExpressionView(searchText, replacementText);
 
         _documentViewPackage.appendDocumentView(regularExpressionView);
-
-        recompileDocumentView();
 
         refreshDisplayedDocumentText();
 
@@ -133,14 +126,11 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         DocumentFilterView filterView = new DocumentFilterView(filterText, rowsBefore, rowsAfter);
         _documentViewPackage.appendDocumentView(filterView);
 
-        recompileDocumentView();
-
         refreshDisplayedDocumentText();
     }
 
     public void removeFilter(DocumentViewBase documentViewBase) {
         _documentViewPackage.removeDocumentView(documentViewBase);
-        recompileDocumentView();
         refreshDisplayedDocumentText();
     }
 
@@ -414,7 +404,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
             _documentViewPackage.appendDocumentView(filterView);
 
-            recompileDocumentView();
             refreshDisplayedDocumentText();
             _labelContainerPane.invalidate();
             _labelPane.repaint();

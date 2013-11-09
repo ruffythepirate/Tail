@@ -5,6 +5,8 @@
  */
 package jc.se.tail.model.document;
 
+import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.DocumentViewBase;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import jc.se.tail.model.document.DocumentViewUpdatedArgs;
+import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 import jc.se.tail.model.impl.RowInfo;
 
 /**

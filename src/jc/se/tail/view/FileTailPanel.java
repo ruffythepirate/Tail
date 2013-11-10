@@ -33,6 +33,7 @@ import jc.se.tail.model.document.view.DocumentViewBase;
 import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.DocumentViewPackageCommunicator;
 import jc.se.tail.model.document.IDocumentViewPortal;
+import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 import jc.se.tail.model.document.view.RegularExpressionView;
 import jc.se.tail.model.impl.SearchResult;
 import jc.se.tail.model.impl.SearchResultHit;
@@ -454,7 +455,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private void updateDisplayedDocumentText() {
         try {
-            String newline = System.getProperty("line.separator");
+            String newline = getNewline();
 
             _documentToTrack.analyzeFile();
 
@@ -474,9 +475,25 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         }
     }
 
+    protected String getNewline() {
+        String newline = System.getProperty("line.separator");
+        return newline;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
-        updateDisplayedDocumentText();
+        
+        if(arg instanceof DocumentViewUpdatedArgs){
+            DocumentViewUpdatedArgs event = (DocumentViewUpdatedArgs) arg;
+            
+            int updatedFromLine = event.getUpdatedFromViewLine();
+
+            if(event.getUpdatedFromViewLine() < _currentNumberOfShowedLines) {
+                _currentNumberOfShowedLines = 0;
+                _fileContentTxt.setText(null);
+            }
+            updateDisplayedDocumentText();
+        }
     }
 
     private int getLineHeight() {

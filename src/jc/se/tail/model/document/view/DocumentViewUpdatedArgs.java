@@ -23,4 +23,5 @@ public class DocumentViewUpdatedArgs {
     public int getUpdatedFromViewLine() {
         return _updatedFromViewLine;
     }
+
 }

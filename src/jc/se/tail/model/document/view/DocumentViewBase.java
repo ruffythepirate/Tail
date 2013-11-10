@@ -77,12 +77,11 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
         _parentDocumentView.addObserver(this);
         InvalidateText(0);        
     }
-
+    
     protected void InvalidateText(int fromLine) {
         while(_documentLines.size() > fromLine) {
-            _documentLines.remove(fromLine -1 );
+            _documentLines.remove(fromLine );
         }
-        _documentLines.clear();
         DocumentViewUpdatedArgs event = new DocumentViewUpdatedArgs(fromLine);
         setChanged();
         notifyObservers(event);

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jc.se.tail.view;
 
 import java.awt.Color;
@@ -16,15 +15,14 @@ import javax.swing.BorderFactory;
 public class FilterDialog extends javax.swing.JDialog {
 
     private boolean _shouldFilter;
-            
-    
+
     /**
      * Creates new form FilterDialog
      */
     public FilterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        getRootPane().setBorder( BorderFactory.createLineBorder(Color.BLUE) );
+        getRootPane().setBorder(BorderFactory.createLineBorder(Color.BLUE));
     }
 
     /**
@@ -44,6 +42,7 @@ public class FilterDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         _filterStringTxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        _excludeRowsChk = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -73,6 +72,8 @@ public class FilterDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Filter Text");
 
+        _excludeRowsChk.setText("Exclude Rows");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,22 +81,25 @@ public class FilterDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(_filterStringTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(_rowsAboveNbr, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(_rowsBelowNbr, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(_filterBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(_cancelBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(_filterStringTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(_rowsAboveNbr, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(_rowsBelowNbr, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(_excludeRowsChk)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(_filterBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(_cancelBtn)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,7 +122,8 @@ public class FilterDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(_filterBtn)
-                    .addComponent(_cancelBtn)))
+                    .addComponent(_cancelBtn)
+                    .addComponent(_excludeRowsChk)))
         );
 
         pack();
@@ -137,8 +142,8 @@ public class FilterDialog extends javax.swing.JDialog {
     }//GEN-LAST:event__filterBtnActionPerformed
 
     private void _filterStringTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterStringTxtActionPerformed
-         _shouldFilter = true;
-        setVisible(false);       
+        _shouldFilter = true;
+        setVisible(false);
         // TODO add your handling code here:
     }//GEN-LAST:event__filterStringTxtActionPerformed
 
@@ -186,6 +191,7 @@ public class FilterDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _cancelBtn;
+    private javax.swing.JCheckBox _excludeRowsChk;
     private javax.swing.JButton _filterBtn;
     private javax.swing.JTextField _filterStringTxt;
     private javax.swing.JSpinner _rowsAboveNbr;
@@ -200,6 +206,10 @@ public class FilterDialog extends javax.swing.JDialog {
      */
     public boolean getShouldFilter() {
         return _shouldFilter;
+    }
+
+    public boolean getShouldExcludeRows() {
+        return _excludeRowsChk.isSelected();
     }
 
     /**
@@ -220,7 +230,7 @@ public class FilterDialog extends javax.swing.JDialog {
      * @return the _rowsBefore
      */
     public int getRowsBefore() {
-        return (int)_rowsAboveNbr.getValue();
+        return (int) _rowsAboveNbr.getValue();
     }
 
     /**
@@ -234,7 +244,7 @@ public class FilterDialog extends javax.swing.JDialog {
      * @return the _rowsAfter
      */
     public int getRowsAfter() {
-        return (int)_rowsBelowNbr.getValue();
+        return (int) _rowsBelowNbr.getValue();
     }
 
     /**

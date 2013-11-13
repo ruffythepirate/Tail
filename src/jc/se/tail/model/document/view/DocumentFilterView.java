@@ -27,6 +27,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     protected String _filterString;
     protected int _rowsAbove;
     protected int _rowsAfter;
+    protected boolean _shouldExcludeRows;
         
     public DocumentFilterView(Document document, String filterString, int rowsAbove, int rowsAfter) {
         super();
@@ -59,9 +60,12 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
         
         for(int i = 0; i< documentLines.size(); i++) {
             String line = documentLines.get(i);
-            if(line.indexOf(getFilterString()) > -1){
+            if(    (!_shouldExcludeRows
+                    && line.indexOf(getFilterString()) > -1)
+                || (_shouldExcludeRows
+                   && line.indexOf(getFilterString()) == -1)){
                 rowsPartOfFilter.add(i);
-            }
+            } 
         }
         
         Integer lastIndex = null;
@@ -153,6 +157,20 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
      */
     public void setRowsAfter(int _rowsAfter) {
         this._rowsAfter = _rowsAfter;
+    }
+
+    /**
+     * @return the _shouldExcludeRows
+     */
+    public boolean isShouldExcludeRows() {
+        return _shouldExcludeRows;
+    }
+
+    /**
+     * @param _shouldExcludeRows the _shouldExcludeRows to set
+     */
+    public void setShouldExcludeRows(boolean shouldExcludeRows) {
+        this._shouldExcludeRows = shouldExcludeRows;
     }
    
     

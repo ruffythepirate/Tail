@@ -120,9 +120,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     }
 
-    public void appendFilter(String filterText, int rowsBefore, int rowsAfter) {
+    public void appendFilter(String filterText, int rowsBefore, int rowsAfter, boolean shouldExcludeRows) {
 
         DocumentFilterView filterView = new DocumentFilterView(filterText, rowsBefore, rowsAfter);
+        filterView.setShouldExcludeRows(shouldExcludeRows);
         _documentViewPackage.appendDocumentView(filterView);
 
         refreshDisplayedDocumentText();
@@ -417,6 +418,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                     settings.getFilterText(),
                     settings.getRowsBefore(),
                     settings.getRowsAfter());
+            
+            filterView.setShouldExcludeRows(settings.getShouldExcludeRows());
 
             _labelPane.getLabelList().addLabel(settings.getFilterText(), filterView);
 

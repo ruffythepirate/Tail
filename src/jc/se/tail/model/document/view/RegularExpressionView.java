@@ -61,7 +61,7 @@ public class RegularExpressionView extends DocumentViewBase implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         setChanged();
-        notifyObservers();
+        notifyObservers(arg);
     }
 
     /**

@@ -21,6 +21,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.manager.DocumentManager;
 import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.view.SortedView;
 import jc.se.util.view.TabCloseActionHandler;
 
 /**
@@ -78,6 +79,9 @@ public class TailWindow extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         _searchMenuItem = new javax.swing.JMenuItem();
+        _sortingMenuItem = new javax.swing.JMenu();
+        _sortMenuItem = new javax.swing.JMenuItem();
+        _sortDescMenuItem = new javax.swing.JMenuItem();
         _filterMenuItem = new javax.swing.JMenuItem();
         _reformatRowsMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -121,6 +125,26 @@ public class TailWindow extends javax.swing.JFrame {
             }
         });
         jMenu3.add(_searchMenuItem);
+
+        _sortingMenuItem.setText("Sorting");
+
+        _sortMenuItem.setText("Sort Asc");
+        _sortMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _sortMenuItemActionPerformed(evt);
+            }
+        });
+        _sortingMenuItem.add(_sortMenuItem);
+
+        _sortDescMenuItem.setText("Sort Desc");
+        _sortDescMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                _sortDescMenuItemActionPerformed(evt);
+            }
+        });
+        _sortingMenuItem.add(_sortDescMenuItem);
+
+        jMenu3.add(_sortingMenuItem);
 
         _filterMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         _filterMenuItem.setText("Filter");
@@ -270,6 +294,25 @@ public class TailWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event__reformatRowsMenuItemActionPerformed
 
+    private void _sortMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortMenuItemActionPerformed
+        //A sort view is added to the view bag.
+        FileTailPanel selectedPanel = getActiveFilePane();
+
+        if (selectedPanel != null) {
+            SortedView sortView = new SortedView(false);
+            selectedPanel.addDocumentView(sortView);
+        }        
+    }//GEN-LAST:event__sortMenuItemActionPerformed
+
+    private void _sortDescMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortDescMenuItemActionPerformed
+         FileTailPanel selectedPanel = getActiveFilePane();
+
+        if (selectedPanel != null) {
+            SortedView sortView = new SortedView(true);
+            selectedPanel.addDocumentView(sortView);
+        } 
+    }//GEN-LAST:event__sortDescMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -309,6 +352,9 @@ public class TailWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem _filterMenuItem;
     private javax.swing.JMenuItem _reformatRowsMenuItem;
     private javax.swing.JMenuItem _searchMenuItem;
+    private javax.swing.JMenuItem _sortDescMenuItem;
+    private javax.swing.JMenuItem _sortMenuItem;
+    private javax.swing.JMenu _sortingMenuItem;
     private javax.swing.JTabbedPane _tabbedPane;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

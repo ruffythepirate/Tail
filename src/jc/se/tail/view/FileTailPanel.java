@@ -120,6 +120,10 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     }
 
+    public void addDocumentView(DocumentViewBase viewBase) {
+        _documentViewPackage.appendDocumentView(viewBase);
+    }
+    
     public void appendFilter(String filterText, int rowsBefore, int rowsAfter, boolean shouldExcludeRows) {
 
         DocumentFilterView filterView = new DocumentFilterView(filterText, rowsBefore, rowsAfter);

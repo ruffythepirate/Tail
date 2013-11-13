@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jc.se.tail.model.document.IDocumentViewPortal;
 
 /**
@@ -30,17 +32,19 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
 
     @Override
     public int getDocumentTotalRows(){
-                if(_parentDocumentView != null) {
-        return _parentDocumentView.getDocumentTotalRows();
+        if(_parentDocumentView != null) {
+            return _parentDocumentView.getDocumentTotalRows();
         }
-        return 0;
+        return getViewPortalTotalRows();
 
     }
 
     @Override
     public int getViewPortalTotalRows() {
-      if(_parentDocumentView != null) {
-        return _parentDocumentView.getViewPortalTotalRows();
+        try {
+            return getTextLines(0).size();
+        } catch (IOException ex) {
+            Logger.getLogger(DocumentViewBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
 

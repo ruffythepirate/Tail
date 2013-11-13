@@ -32,6 +32,19 @@ public class ProxyDocumentView extends DocumentViewBase {
         notifyObservers(arg);
     }
 
+    @Override
+    public int getDocumentTotalRows() {
+        return _wrappedDocumentView.getDocumentTotalRows(); 
+    }
+
+    @Override
+    public int getViewPortalTotalRows() {
+        return _wrappedDocumentView.getViewPortalTotalRows(); 
+    }
+    
+    
+            
+
     /**
      * @return the _wrappedDocumentView
      */

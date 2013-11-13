@@ -25,7 +25,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="0"/>
-        <Property name="rows" type="int" value="2"/>
+        <Property name="rows" type="int" value="3"/>
       </Layout>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="_toolBarPane">
@@ -138,6 +138,32 @@
                 <Property name="verticalGap" type="int" value="0"/>
               </Layout>
             </Container>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="_viewPortalMetricsPane">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="_viewRowsInfoLbl">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="View Rows:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="_viewRowsValueLbl">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="0"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="_documentRowsInfoLbl">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Document Rows:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="_documentRowsValueLbl">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="0"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>

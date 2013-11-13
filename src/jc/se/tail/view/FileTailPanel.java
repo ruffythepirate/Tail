@@ -55,7 +55,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     private DocumentViewBase _documentViewPortal;
     private DocumentViewPackageCommunicator _documentViewPackage;
-    
 
     /**
      * Creates new form FileTailPanel
@@ -64,7 +63,6 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         initComponents();
         doLayout();
 
-        
         _labelPane.getLabelList().addObserver(new Observer() {
 
             @Override
@@ -87,7 +85,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         _documentViewPortal = _documentViewPackage.getPackageResultView();
         _documentViewPortal.addObserver(this);
-        
+
         FilterLabelController labelController = new FilterLabelController(_documentViewPackage);
         _labelPane.setController(labelController);
 
@@ -204,6 +202,11 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _labelContainerPane = new javax.swing.JPanel();
         _addFilterBtn = new javax.swing.JButton();
         _labelPane = new jc.se.util.view.labelpane.LabelPane();
+        _viewPortalMetricsPane = new javax.swing.JPanel();
+        _viewRowsInfoLbl = new javax.swing.JLabel();
+        _viewRowsValueLbl = new javax.swing.JLabel();
+        _documentRowsInfoLbl = new javax.swing.JLabel();
+        _documentRowsValueLbl = new javax.swing.JLabel();
         _searchPane = new javax.swing.JPanel();
         _searchTxt = new javax.swing.JTextField();
         _previousResultBtn = new javax.swing.JButton();
@@ -216,7 +219,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
         setLayout(new java.awt.BorderLayout());
 
-        _topPane.setLayout(new java.awt.GridLayout(2, 0));
+        _topPane.setLayout(new java.awt.GridLayout(3, 0));
 
         _toolBarPane.setMinimumSize(new java.awt.Dimension(49, 0));
         _toolBarPane.setLayout(new javax.swing.BoxLayout(_toolBarPane, javax.swing.BoxLayout.LINE_AXIS));
@@ -286,6 +289,20 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         _labelContainerPane.add(_labelPane, java.awt.BorderLayout.CENTER);
 
         _topPane.add(_labelContainerPane);
+
+        _viewRowsInfoLbl.setText("View Rows:");
+        _viewPortalMetricsPane.add(_viewRowsInfoLbl);
+
+        _viewRowsValueLbl.setText("0");
+        _viewPortalMetricsPane.add(_viewRowsValueLbl);
+
+        _documentRowsInfoLbl.setText("Document Rows:");
+        _viewPortalMetricsPane.add(_documentRowsInfoLbl);
+
+        _documentRowsValueLbl.setText("0");
+        _viewPortalMetricsPane.add(_documentRowsValueLbl);
+
+        _topPane.add(_viewPortalMetricsPane);
 
         add(_topPane, java.awt.BorderLayout.PAGE_START);
 
@@ -413,7 +430,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     }//GEN-LAST:event__addFilterBtnActionPerformed
 
     private void _toClipboardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__toClipboardBtnActionPerformed
-        String allText  = _fileContentTxt.getText();
+        String allText = _fileContentTxt.getText();
         StringSelection stringSelection = new StringSelection(allText);
         Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
         clpbrd.setContents(stringSelection, null);
@@ -421,6 +438,8 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _addFilterBtn;
+    private javax.swing.JLabel _documentRowsInfoLbl;
+    private javax.swing.JLabel _documentRowsValueLbl;
     private javax.swing.JTextArea _fileContentTxt;
     private javax.swing.JPanel _labelContainerPane;
     private jc.se.util.view.labelpane.LabelPane _labelPane;
@@ -436,6 +455,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     private javax.swing.JButton _toClipboardBtn;
     private javax.swing.JPanel _toolBarPane;
     private javax.swing.JPanel _topPane;
+    private javax.swing.JPanel _viewPortalMetricsPane;
+    private javax.swing.JLabel _viewRowsInfoLbl;
+    private javax.swing.JLabel _viewRowsValueLbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
@@ -473,6 +495,13 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         } catch (IOException ex) {
             Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        int portalNumberOfRows = _documentViewPortal.getViewPortalTotalRows();
+        int documentNumberOfRows = _documentViewPortal.getDocumentTotalRows();
+
+        _viewRowsValueLbl.setText(portalNumberOfRows + "");
+        _documentRowsValueLbl.setText(documentNumberOfRows + "");
+
     }
 
     protected String getNewline() {
@@ -482,17 +511,18 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        
-        if(arg instanceof DocumentViewUpdatedArgs){
+
+        if (arg instanceof DocumentViewUpdatedArgs) {
             DocumentViewUpdatedArgs event = (DocumentViewUpdatedArgs) arg;
-            
+
             int updatedFromLine = event.getUpdatedFromViewLine();
 
-            if(event.getUpdatedFromViewLine() < _currentNumberOfShowedLines) {
+            if (event.getUpdatedFromViewLine() < _currentNumberOfShowedLines) {
                 _currentNumberOfShowedLines = 0;
                 _fileContentTxt.setText(null);
             }
             updateDisplayedDocumentText();
+
         }
     }
 

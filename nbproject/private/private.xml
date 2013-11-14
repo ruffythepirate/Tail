@@ -22,6 +22,7 @@
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentFilterView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/FilterDialog.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/PlainDocumentViewPortal.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/RegularExpressionView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/ILabelController.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/DocumentViewPackage.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/controller/FilterLabelController.java</file>
@@ -31,6 +32,7 @@
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/DocumentViewPackageCommunicator.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/FileTailPanel.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewBase.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/SortedView.java</file>
         </group>
     </open-files>
 </project-private>

@@ -9,9 +9,11 @@ import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import jc.se.util.compare.StringComparator;
 
 /**
  *
@@ -19,10 +21,13 @@ import java.util.Observer;
  */
 public class SortedView extends DocumentViewBase implements Observer {
 
-    private boolean _sortDescending;
+    protected boolean _sortDescending;
+    
+    private StringComparator _stringComparator;
 
     public SortedView(boolean sortDescending) {
         _sortDescending = sortDescending;
+        _stringComparator = new StringComparator();
     }
 
     @Override
@@ -39,8 +44,8 @@ public class SortedView extends DocumentViewBase implements Observer {
             _documentLines.clear();
             List<String> parentLines = _parentDocumentView.getTextLines(0);
 
-            java.util.Collections.sort(parentLines, Collator.getInstance());
-            if (!_sortDescending) {
+            java.util.Collections.sort(parentLines, _stringComparator);
+            if (!isSortDescending()) {
                 _documentLines.addAll(parentLines);
                 response.addAll(parentLines);
 
@@ -66,12 +71,26 @@ public class SortedView extends DocumentViewBase implements Observer {
 
     @Override
     public String getViewTitle() {
-        if (!_sortDescending) {
+        if (!isSortDescending()) {
             return "Sort ASC";
 
         }
         return "Sort DESC";
 
+    }
+
+    /**
+     * @return the _sortDescending
+     */
+    public boolean isSortDescending() {
+        return _sortDescending;
+    }
+
+    /**
+     * @param _sortDescending the _sortDescending to set
+     */
+    public void setSortDescending(boolean _sortDescending) {
+        this._sortDescending = _sortDescending;
     }
 
 }

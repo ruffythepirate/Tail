@@ -76,6 +76,7 @@ public class DocumentFilterViewTest {
 
         _target.setFilterString("This");
 
-        assertEquals(1, _target.getViewPortalTotalRows());
+        int portalTotalViews = _target.getViewPortalTotalRows();
+        assertEquals(1, portalTotalViews);
     }
 }

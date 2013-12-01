@@ -31,7 +31,7 @@ public class SortedView extends DocumentViewBase implements Observer {
     }
 
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
         List<String> response = new ArrayList<>();
         if (_documentLines.size() > 0) {
             for (int i = startLine; i < _documentLines.size(); i++) {

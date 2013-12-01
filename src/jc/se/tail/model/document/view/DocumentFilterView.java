@@ -51,7 +51,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     }
 
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
         List<String> documentLines = _parentDocumentView.getTextLines(startLine - getRowsAbove());
         
         List<String> filteredDocumentRows = new ArrayList<String>();
@@ -104,7 +104,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
         if(_documentLines == null ) {
             try {
                 getTextLines(0);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(DocumentFilterView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -129,6 +129,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
      */
     public void setFilterString(String _filterString) {
         this._filterString = _filterString;
+        _documentLines = null;
     }
 
     /**

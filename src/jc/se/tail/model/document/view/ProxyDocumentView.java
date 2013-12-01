@@ -22,7 +22,7 @@ public class ProxyDocumentView extends DocumentViewBase {
     }
 
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
         return _wrappedDocumentView.getTextLines(startLine);
     }
 

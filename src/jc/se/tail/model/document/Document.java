@@ -9,6 +9,7 @@ import jc.se.tail.model.document.view.DocumentFilterView;
 import jc.se.tail.model.document.view.DocumentViewBase;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -19,6 +20,8 @@ import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 import jc.se.tail.model.impl.RowInfo;
 
@@ -61,6 +64,23 @@ public class Document extends DocumentViewBase {
         return FileChannel.open(_wrappedFile.toPath(), READ);
     }
 
+    private long _lastPositionWithNewline = 0;
+    
+    
+    
+    public long ReadLinesFromPosition(long startPosition, int maxNumberOfLines, List<String> collectionToAddLinesTo) throws Exception {
+           try (RandomAccessFile reader = new RandomAccessFile(_wrappedFile, "r")) {
+                reader.seek(startPosition);
+                String line;
+                int readLines = 0;
+                while ((line = reader.readLine()) != null && readLines < maxNumberOfLines) {
+                    collectionToAddLinesTo.add(line);
+                    ++readLines;
+                }
+                return reader.getFilePointer();
+            } 
+    }
+    
     public List<String> getTextLines(int startLine, int numberOfLinesToReturn) throws IOException {
 
         List<String> lines = new ArrayList<String>();

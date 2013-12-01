@@ -78,7 +78,7 @@ public class DocumentViewPackage extends DocumentViewBase {
     }
 
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
         DocumentViewBase lastView = getLastDocumentInPackage();
         if(lastView != null)
         {

@@ -26,7 +26,7 @@ public class SimpleDocumentView extends DocumentViewBase implements Observer{
     }
     
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
         return _parentDocumentView.getTextLines(startLine);
     }
 

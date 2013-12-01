@@ -6,8 +6,6 @@
 
 package jc.se.tail.model.document.view;
 
-import jc.se.tail.model.document.view.DocumentViewBase;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -27,7 +25,7 @@ public class TailDocumentView extends DocumentViewBase implements Observer{
     }
     
     @Override
-    public List<String> getTextLines(int startLine) throws IOException {
+    public List<String> getTextLines(int startLine) throws Exception {
 
         List<String> returnLines = _parentDocumentView.getTextLines(
                 Math.max(startLine, _documentLines.size()));

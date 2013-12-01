@@ -43,9 +43,6 @@ public class DocumentManager {
     }
 
     public void startTrackDocument(Document document) throws IOException, Exception {
-
-
-
         File fileToTrack = document.getFile();
         File directory = getFileDirectory(fileToTrack);
 

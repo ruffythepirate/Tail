@@ -28,7 +28,7 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
     }
     
     @Override
-    public abstract List<String> getTextLines(int startLine) throws IOException;
+    public abstract List<String> getTextLines(int startLine) throws Exception;
 
     @Override
     public int getDocumentTotalRows(){
@@ -43,7 +43,7 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
     public int getViewPortalTotalRows() {
         try {
             return getTextLines(0).size();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DocumentViewBase.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
@@ -56,6 +56,7 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
         if(_parentDocumentView != null) {
             _parentDocumentView.clearCachedData();
         }
+        _documentLines = null;
     }
     
     public String getViewTitle() {
@@ -79,10 +80,10 @@ public abstract class DocumentViewBase extends Observable implements IDocumentVi
         
         this._parentDocumentView = _parentDocumentView;        
         _parentDocumentView.addObserver(this);
-        InvalidateText(0);        
+        invalidateText(0);        
     }
     
-    protected void InvalidateText(int fromLine) {
+    protected void invalidateText(int fromLine) {
         while(_documentLines.size() > fromLine) {
             _documentLines.remove(fromLine );
         }

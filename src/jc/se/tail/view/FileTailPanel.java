@@ -499,7 +499,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 scrollToBottom();
             }
             _currentNumberOfShowedLines += allLines.size();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 

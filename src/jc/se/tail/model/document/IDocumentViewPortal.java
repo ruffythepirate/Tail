@@ -15,7 +15,7 @@ import java.util.Observer;
  * @author ruffy
  */
 public interface IDocumentViewPortal {
-    List<String> getTextLines(int startLine) throws IOException;
+    List<String> getTextLines(int startLine) throws Exception;
     
     int getDocumentTotalRows();
     

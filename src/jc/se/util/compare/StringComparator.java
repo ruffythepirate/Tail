@@ -23,6 +23,8 @@ public class StringComparator implements Comparator<String> {
         } else if (o1 == null) {
             return -1;
         } else {
+            o1 = o1.toLowerCase();
+            o2 = o2.toLowerCase();
             for (int i = 0; i < o1.length() && i < o2.length(); i++) {
                 if (Character.isDigit(o2.charAt(i)) && Character.isDigit(o1.charAt(i))) {
                    int digitDiff = compareNumbers(o1, o2, i);

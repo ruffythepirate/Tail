@@ -155,9 +155,6 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
         this.getActionMap().put("activate search", activateSearchAction);
         _fileContentTxt.getActionMap().put("activate search", activateSearchAction);
 
-        getActionMap().
-                
-        
         this.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
         _fileContentTxt.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
     }

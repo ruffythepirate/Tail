@@ -44,7 +44,7 @@ import jc.se.util.view.labelpane.LabelsUpdatedEvent;
  *
  * @author Ruffy
  */
-public class FileTailPanel extends javax.swing.JPanel implements Observer {
+public class FileTailPane extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
 
@@ -59,7 +59,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
     /**
      * Creates new form FileTailPanel
      */
-    public FileTailPanel(Document documentToTrack) {
+    public FileTailPane(Document documentToTrack) {
         initComponents();
         doLayout();
 
@@ -155,6 +155,9 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
         this.getActionMap().put("activate search", activateSearchAction);
         _fileContentTxt.getActionMap().put("activate search", activateSearchAction);
 
+        getActionMap().
+                
+        
         this.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
         _fileContentTxt.getInputMap(JComponent.WHEN_FOCUSED).put(keyStroke, "activate search");
     }
@@ -500,7 +503,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
             }
             _currentNumberOfShowedLines += allLines.size();
         } catch (Exception ex) {
-            Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         int portalNumberOfRows = _documentViewPortal.getViewPortalTotalRows();
@@ -557,7 +560,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                 _fileContentTxt.getHighlighter().addHighlight(hit.getHitStart(), hit.getHitEnd(),
                         _highlightPainter);
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -572,7 +575,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                     lastHighlightedLine = hit.getRowNumber();
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -596,7 +599,7 @@ public class FileTailPanel extends javax.swing.JPanel implements Observer {
                     lastRow = rowNumber;
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             nextIndex = allContent.indexOf(searchText, nextIndex + 1);

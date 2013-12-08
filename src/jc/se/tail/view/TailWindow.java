@@ -74,26 +74,34 @@ public class TailWindow extends javax.swing.JFrame {
         _fileChooser = new javax.swing.JFileChooser();
         _tabbedPane = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        _fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        _editMenu = new javax.swing.JMenu();
         _searchMenuItem = new javax.swing.JMenuItem();
         _sortingMenuItem = new javax.swing.JMenu();
         _sortMenuItem = new javax.swing.JMenuItem();
         _sortDescMenuItem = new javax.swing.JMenuItem();
         _filterMenuItem = new javax.swing.JMenuItem();
         _reformatRowsMenuItem = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        _helpMenu = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         _tabbedPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         _tabbedPane.setPreferredSize(new java.awt.Dimension(300, 300));
+        _tabbedPane.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                _tabbedPaneComponentAdded(evt);
+            }
+            public void componentRemoved(java.awt.event.ContainerEvent evt) {
+                _tabbedPaneComponentRemoved(evt);
+            }
+        });
         getContentPane().add(_tabbedPane, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("File");
+        _fileMenu.setText("File");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("Open");
@@ -102,7 +110,7 @@ public class TailWindow extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        _fileMenu.add(jMenuItem1);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Exit");
@@ -111,11 +119,12 @@ public class TailWindow extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        _fileMenu.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(_fileMenu);
 
-        jMenu3.setText("Edit");
+        _editMenu.setText("Edit");
+        _editMenu.setEnabled(false);
 
         _searchMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
         _searchMenuItem.setText("Search");
@@ -124,7 +133,7 @@ public class TailWindow extends javax.swing.JFrame {
                 _searchMenuItemActionPerformed(evt);
             }
         });
-        jMenu3.add(_searchMenuItem);
+        _editMenu.add(_searchMenuItem);
 
         _sortingMenuItem.setText("Sorting");
 
@@ -144,7 +153,7 @@ public class TailWindow extends javax.swing.JFrame {
         });
         _sortingMenuItem.add(_sortDescMenuItem);
 
-        jMenu3.add(_sortingMenuItem);
+        _editMenu.add(_sortingMenuItem);
 
         _filterMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         _filterMenuItem.setText("Filter");
@@ -153,7 +162,7 @@ public class TailWindow extends javax.swing.JFrame {
                 _filterMenuItemActionPerformed(evt);
             }
         });
-        jMenu3.add(_filterMenuItem);
+        _editMenu.add(_filterMenuItem);
 
         _reformatRowsMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         _reformatRowsMenuItem.setText("Reformat Rows");
@@ -162,17 +171,17 @@ public class TailWindow extends javax.swing.JFrame {
                 _reformatRowsMenuItemActionPerformed(evt);
             }
         });
-        jMenu3.add(_reformatRowsMenuItem);
+        _editMenu.add(_reformatRowsMenuItem);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(_editMenu);
 
-        jMenu2.setText("Help");
+        _helpMenu.setText("Help");
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jMenuItem3.setText("About");
-        jMenu2.add(jMenuItem3);
+        _helpMenu.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(_helpMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -193,7 +202,7 @@ public class TailWindow extends javax.swing.JFrame {
                 try {
                     _documentManager.startTrackDocument(document);
 
-                    FileTailPanel filePanel = new FileTailPanel(document);
+                    FileTailPane filePanel = new FileTailPane(document);
                     addClosableTabbedPane(selectedFile, filePanel);
 
                 } catch (IOException ex) {
@@ -208,7 +217,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void addClosableTabbedPane(File selectedFile, FileTailPanel filePanel) {
+    private void addClosableTabbedPane(File selectedFile, FileTailPane filePanel) {
         _tabbedPane.addTab(selectedFile.getName(), null, filePanel, selectedFile.getAbsolutePath());
 
         int index = _tabbedPane.indexOfComponent(filePanel);
@@ -241,7 +250,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _filterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterMenuItemActionPerformed
 
-        FileTailPanel selectedPanel = getActiveFilePane();
+        FileTailPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             FilterDialog settings = new FilterDialog(this, true);
@@ -259,14 +268,13 @@ public class TailWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event__filterMenuItemActionPerformed
 
-    private FileTailPanel getActiveFilePane() {
-        // TODO add your handling code here:
-        FileTailPanel selectedPanel = (FileTailPanel) _tabbedPane.getSelectedComponent();
+    private FileTailPane getActiveFilePane() {
+        FileTailPane selectedPanel = (FileTailPane) _tabbedPane.getSelectedComponent();
         return selectedPanel;
     }
 
     private void _searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchMenuItemActionPerformed
-        FileTailPanel selectedPanel = getActiveFilePane();
+        FileTailPane selectedPanel = getActiveFilePane();
         if (selectedPanel != null) {
             Action searchAction = selectedPanel.getActionMap().get("activate search");
             if (searchAction != null) {
@@ -277,7 +285,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _reformatRowsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__reformatRowsMenuItemActionPerformed
 
-        FileTailPanel selectedPanel = getActiveFilePane();
+        FileTailPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             RegularExpressionDialog settings = new RegularExpressionDialog(this, true);
@@ -296,7 +304,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _sortMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortMenuItemActionPerformed
         //A sort view is added to the view bag.
-        FileTailPanel selectedPanel = getActiveFilePane();
+        FileTailPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(false);
@@ -305,7 +313,7 @@ public class TailWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__sortMenuItemActionPerformed
 
     private void _sortDescMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortDescMenuItemActionPerformed
-         FileTailPanel selectedPanel = getActiveFilePane();
+         FileTailPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(true);
@@ -313,6 +321,18 @@ public class TailWindow extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event__sortDescMenuItemActionPerformed
 
+    private void _tabbedPaneComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event__tabbedPaneComponentAdded
+        updateMenuItemsEnabled();
+    }//GEN-LAST:event__tabbedPaneComponentAdded
+
+    private void _tabbedPaneComponentRemoved(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event__tabbedPaneComponentRemoved
+        updateMenuItemsEnabled();
+    }//GEN-LAST:event__tabbedPaneComponentRemoved
+
+    private void updateMenuItemsEnabled(){
+        _editMenu.setEnabled(_tabbedPane.getTabCount() > 0);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -348,17 +368,17 @@ public class TailWindow extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu _editMenu;
     private javax.swing.JFileChooser _fileChooser;
+    private javax.swing.JMenu _fileMenu;
     private javax.swing.JMenuItem _filterMenuItem;
+    private javax.swing.JMenu _helpMenu;
     private javax.swing.JMenuItem _reformatRowsMenuItem;
     private javax.swing.JMenuItem _searchMenuItem;
     private javax.swing.JMenuItem _sortDescMenuItem;
     private javax.swing.JMenuItem _sortMenuItem;
     private javax.swing.JMenu _sortingMenuItem;
     private javax.swing.JTabbedPane _tabbedPane;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

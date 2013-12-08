@@ -5,11 +5,7 @@
  */
 package jc.se.tail.model.document.view;
 
-import java.io.IOException;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;

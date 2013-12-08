@@ -19,6 +19,7 @@
         <group>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/TabCloseActionHandler.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/DocumentFilterViewTest.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/action/FilterAction.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IFileService.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/TailWindow.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/DirectoryEventsListener.java</file>
@@ -31,7 +32,6 @@
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/file/impl/RandomAccessFileWrapper.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/ProxyDocumentView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/Document.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/FileTailPanel.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/DocumentManager.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/view/SortedViewTest.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentFilterView.java</file>
@@ -39,11 +39,13 @@
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/PlainDocumentViewPortal.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/RegularExpressionView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/file/IRandomAccessFile.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/FileTailPane.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/IndexedDocument.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/DocumentService.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/controller/FilterLabelController.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/LabelPane.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewUpdatedArgs.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/IndexedDocumentTest.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/DocumentViewPackageCommunicator.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewBase.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/SortedView.java</file>

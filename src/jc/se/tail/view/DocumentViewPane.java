@@ -4,6 +4,7 @@
  */
 package jc.se.tail.view;
 
+import jc.se.tail.dialog.FilterDialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -44,7 +45,7 @@ import jc.se.util.view.labelpane.LabelsUpdatedEvent;
  *
  * @author Ruffy
  */
-public class FileTailPane extends javax.swing.JPanel implements Observer {
+public class DocumentViewPane extends javax.swing.JPanel implements Observer {
 
     private Document _documentToTrack;
 
@@ -59,7 +60,7 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
     /**
      * Creates new form FileTailPanel
      */
-    public FileTailPane(Document documentToTrack) {
+    public DocumentViewPane(Document documentToTrack) {
         initComponents();
         doLayout();
 
@@ -500,7 +501,7 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
             }
             _currentNumberOfShowedLines += allLines.size();
         } catch (Exception ex) {
-            Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DocumentViewPane.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         int portalNumberOfRows = _documentViewPortal.getViewPortalTotalRows();
@@ -557,7 +558,7 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
                 _fileContentTxt.getHighlighter().addHighlight(hit.getHitStart(), hit.getHitEnd(),
                         _highlightPainter);
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DocumentViewPane.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -572,7 +573,7 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
                     lastHighlightedLine = hit.getRowNumber();
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DocumentViewPane.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -596,7 +597,7 @@ public class FileTailPane extends javax.swing.JPanel implements Observer {
                     lastRow = rowNumber;
                 }
             } catch (BadLocationException ex) {
-                Logger.getLogger(FileTailPane.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DocumentViewPane.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             nextIndex = allContent.indexOf(searchText, nextIndex + 1);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+">
+    <description>
+        This is the Spring configuration file for the Tail project. It ties together
+        the dependencies of views, controllers, managers and services.
+    </description>
+    
+    
+    <bean id="tailWindow" class="jc.se.tail.view.TailWindow" 
+        scope="prototype">
+                
+        <property name="viewFactory" ref="viewFactory"/>
+        <property name="documentManager" ref="documentManager"/>
+    </bean>
+    
+    <bean id="viewFactory" class="jc.se.tail.service.impl.ViewFactory" >
+    </bean>
+
+    <bean id="documentManager" class="jc.se.tail.manager.DocumentManager"/>
+
+</beans>

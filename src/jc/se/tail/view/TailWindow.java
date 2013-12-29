@@ -4,6 +4,8 @@
  */
 package jc.se.tail.view;
 
+import jc.se.tail.dialog.FilterDialog;
+import jc.se.tail.dialog.RegularExpressionDialog;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,7 +24,10 @@ import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.manager.DocumentManager;
 import jc.se.tail.model.document.Document;
 import jc.se.tail.model.document.view.SortedView;
+import jc.se.tail.service.IViewFactory;
+import jc.se.tail.service.impl.ViewFactory;
 import jc.se.util.view.TabCloseActionHandler;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -30,7 +35,10 @@ import jc.se.util.view.TabCloseActionHandler;
  */
 public class TailWindow extends javax.swing.JFrame {
 
-    private DocumentManager _documentManager;
+    protected DocumentManager _documentManager;
+    
+    protected IViewFactory _viewFactory;
+    
 
     /**
      * Creates new form TailWindow
@@ -39,6 +47,34 @@ public class TailWindow extends javax.swing.JFrame {
         initComponents();
 
         _documentManager = new DocumentManager();
+    }
+
+    /**
+     * @return the _documentManager
+     */
+    public DocumentManager getDocumentManager() {
+        return _documentManager;
+    }
+
+    /**
+     * @param _documentManager the _documentManager to set
+     */
+    public void setDocumentManager(DocumentManager _documentManager) {
+        this._documentManager = _documentManager;
+    }
+
+    /**
+     * @return the _viewFactory
+     */
+    public IViewFactory getViewFactory() {
+        return _viewFactory;
+    }
+
+    /**
+     * @param _viewFactory the _viewFactory to set
+     */
+    public void setViewFactory(IViewFactory _viewFactory) {
+        this._viewFactory = _viewFactory;
     }
 
     private class CloseFileTabActionHandler extends TabCloseActionHandler {
@@ -55,7 +91,7 @@ public class TailWindow extends javax.swing.JFrame {
             super.actionPerformed(evt);
             try {
                 //Unregisters listener for the document.
-                _documentManager.stopTrackDocument(_document);
+                getDocumentManager().stopTrackDocument(_document);
             } catch (Exception ex) {
                 Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -200,9 +236,9 @@ public class TailWindow extends javax.swing.JFrame {
             for (File selectedFile : selectedFiles) {
                 Document document = new Document(selectedFile);
                 try {
-                    _documentManager.startTrackDocument(document);
+                    getDocumentManager().startTrackDocument(document);
 
-                    FileTailPane filePanel = new FileTailPane(document);
+                    DocumentViewPane filePanel = new DocumentViewPane(document);
                     addClosableTabbedPane(selectedFile, filePanel);
 
                 } catch (IOException ex) {
@@ -217,7 +253,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void addClosableTabbedPane(File selectedFile, FileTailPane filePanel) {
+    private void addClosableTabbedPane(File selectedFile, DocumentViewPane filePanel) {
         _tabbedPane.addTab(selectedFile.getName(), null, filePanel, selectedFile.getAbsolutePath());
 
         int index = _tabbedPane.indexOfComponent(filePanel);
@@ -250,7 +286,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _filterMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__filterMenuItemActionPerformed
 
-        FileTailPane selectedPanel = getActiveFilePane();
+        DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             FilterDialog settings = new FilterDialog(this, true);
@@ -268,13 +304,13 @@ public class TailWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event__filterMenuItemActionPerformed
 
-    private FileTailPane getActiveFilePane() {
-        FileTailPane selectedPanel = (FileTailPane) _tabbedPane.getSelectedComponent();
+    private DocumentViewPane getActiveFilePane() {
+        DocumentViewPane selectedPanel = (DocumentViewPane) _tabbedPane.getSelectedComponent();
         return selectedPanel;
     }
 
     private void _searchMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__searchMenuItemActionPerformed
-        FileTailPane selectedPanel = getActiveFilePane();
+        DocumentViewPane selectedPanel = getActiveFilePane();
         if (selectedPanel != null) {
             Action searchAction = selectedPanel.getActionMap().get("activate search");
             if (searchAction != null) {
@@ -285,7 +321,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _reformatRowsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__reformatRowsMenuItemActionPerformed
 
-        FileTailPane selectedPanel = getActiveFilePane();
+        DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             RegularExpressionDialog settings = new RegularExpressionDialog(this, true);
@@ -304,7 +340,7 @@ public class TailWindow extends javax.swing.JFrame {
 
     private void _sortMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortMenuItemActionPerformed
         //A sort view is added to the view bag.
-        FileTailPane selectedPanel = getActiveFilePane();
+        DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(false);
@@ -313,7 +349,7 @@ public class TailWindow extends javax.swing.JFrame {
     }//GEN-LAST:event__sortMenuItemActionPerformed
 
     private void _sortDescMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortDescMenuItemActionPerformed
-         FileTailPane selectedPanel = getActiveFilePane();
+         DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(true);
@@ -363,7 +399,17 @@ public class TailWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TailWindow().setVisible(true);
+                
+                
+                        String springConfigClassPath = "jc/se/tail/configuration/spring-configuration.xml";
+                        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(springConfigClassPath);
+
+                        
+                IViewFactory viewFactory = (IViewFactory) applicationContext.getBean("viewFactory");
+                
+                TailWindow tailWindow = viewFactory.createTailWindow();
+                
+                tailWindow.setVisible(true);
             }
         });
     }

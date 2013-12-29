@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jc.se.tail.view;
+package jc.se.tail.dialog;
 
 /**
  *

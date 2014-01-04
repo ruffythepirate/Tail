@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package jc.se.tail.manager;
+package jc.se.tail.manager.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,12 +18,13 @@ import java.util.Map;
 import jc.se.tail.model.document.Document;
 import static java.nio.file.StandardWatchEventKinds.*;
 import java.nio.file.WatchEvent;
+import jc.se.tail.manager.IDocumentManager;
 
 /**
  *
  * @author ruffy
  */
-public class DocumentManager {
+public class DocumentManager implements IDocumentManager{
 
     Map<String, List<Document>> _watchedFiles;
     Map<String, WatchKey> _watchedDirectoryKeys;

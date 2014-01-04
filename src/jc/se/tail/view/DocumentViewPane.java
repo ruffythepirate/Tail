@@ -27,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+import jc.se.tail.controller.DocumentViewController;
 import jc.se.tail.controller.FilterLabelController;
 import jc.se.tail.model.document.Document;
 import jc.se.tail.model.document.view.DocumentFilterView;
@@ -47,7 +48,8 @@ import jc.se.util.view.labelpane.LabelsUpdatedEvent;
  */
 public class DocumentViewPane extends javax.swing.JPanel implements Observer {
 
-    private Document _documentToTrack;
+    protected DocumentViewController _documentViewController;
+    protected Document _documentToTrack;
 
     private int _currentNumberOfShowedLines;
     private DefaultHighlighter.DefaultHighlightPainter _highlightPainter;
@@ -55,12 +57,12 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
     private SearchResult _currentSearchResult;
 
     private DocumentViewBase _documentViewPortal;
-    private DocumentViewPackageCommunicator _documentViewPackage;
+    protected DocumentViewPackageCommunicator _documentViewPackage;
 
     /**
      * Creates new form FileTailPanel
      */
-    public DocumentViewPane(Document documentToTrack) {
+    public DocumentViewPane() {
         initComponents();
         doLayout();
 
@@ -81,24 +83,11 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
             }
         });
 
-        _documentToTrack = documentToTrack;
-        _documentViewPackage = new DocumentViewPackageCommunicator(documentToTrack);
-
-        _documentViewPortal = _documentViewPackage.getPackageResultView();
-        _documentViewPortal.addObserver(this);
-
-        FilterLabelController labelController = new FilterLabelController(_documentViewPackage);
-        _labelPane.setController(labelController);
-
-        _labelPane.setLabelList(_documentViewPackage.getLabelList());
-
         _highlightPainter
                 = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 
         _lineHighlightPainter
                 = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
-
-        updateDisplayedDocumentText();
 
         _searchPane.setVisible(_showSearchBtn.isSelected());
 
@@ -107,7 +96,7 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
     }
 
     public void removeDocumentView(DocumentViewBase viewToRemove) {
-        _documentViewPackage.removeDocumentView(viewToRemove);
+        getDocumentViewPackage().removeDocumentView(viewToRemove);
 
         refreshDisplayedDocumentText();
     }
@@ -115,27 +104,27 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
     public void appendReformat(String searchText, String replacementText) {
         RegularExpressionView regularExpressionView = new RegularExpressionView(searchText, replacementText);
 
-        _documentViewPackage.appendDocumentView(regularExpressionView);
+        getDocumentViewPackage().appendDocumentView(regularExpressionView);
 
         refreshDisplayedDocumentText();
 
     }
 
     public void addDocumentView(DocumentViewBase viewBase) {
-        _documentViewPackage.appendDocumentView(viewBase);
+        getDocumentViewPackage().appendDocumentView(viewBase);
     }
-    
+
     public void appendFilter(String filterText, int rowsBefore, int rowsAfter, boolean shouldExcludeRows) {
 
         DocumentFilterView filterView = new DocumentFilterView(filterText, rowsBefore, rowsAfter);
         filterView.setShouldExcludeRows(shouldExcludeRows);
-        _documentViewPackage.appendDocumentView(filterView);
+        getDocumentViewPackage().appendDocumentView(filterView);
 
         refreshDisplayedDocumentText();
     }
 
     public void removeFilter(DocumentViewBase documentViewBase) {
-        _documentViewPackage.removeDocumentView(documentViewBase);
+        getDocumentViewPackage().removeDocumentView(documentViewBase);
         refreshDisplayedDocumentText();
     }
 
@@ -423,12 +412,12 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
                     settings.getFilterText(),
                     settings.getRowsBefore(),
                     settings.getRowsAfter());
-            
+
             filterView.setShouldExcludeRows(settings.getShouldExcludeRows());
 
             _labelPane.getLabelList().addLabel(settings.getFilterText(), filterView);
 
-            _documentViewPackage.appendDocumentView(filterView);
+            getDocumentViewPackage().appendDocumentView(filterView);
 
             refreshDisplayedDocumentText();
             _labelContainerPane.invalidate();
@@ -487,19 +476,23 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
         try {
             String newline = getNewline();
 
-            _documentToTrack.analyzeFile();
+            Document trackedDocument = getDocumentToTrack();
+            if (trackedDocument != null && _documentViewPortal != null) {
+                trackedDocument.analyzeFile();
 
-            List<String> allLines = _documentViewPortal.getTextLines(_currentNumberOfShowedLines);
+                List<String> allLines = _documentViewPortal.getTextLines(_currentNumberOfShowedLines);
 
-            for (String fileLine : allLines) {
-                _fileContentTxt.append(fileLine);
-                _fileContentTxt.append(newline);
+                for (String fileLine : allLines) {
+                    _fileContentTxt.append(fileLine);
+                    _fileContentTxt.append(newline);
+                }
+
+                if (_tailFileEnd.isSelected()) {
+                    scrollToBottom();
+                }
+                _currentNumberOfShowedLines += allLines.size();
+
             }
-
-            if (_tailFileEnd.isSelected()) {
-                scrollToBottom();
-            }
-            _currentNumberOfShowedLines += allLines.size();
         } catch (Exception ex) {
             Logger.getLogger(DocumentViewPane.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -658,5 +651,66 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
             }
         }
         return nextHit;
+    }
+
+    /**
+     * @return the _documentViewController
+     */
+    public DocumentViewController getDocumentViewController() {
+        return _documentViewController;
+    }
+
+    /**
+     * @param _documentViewController the _documentViewController to set
+     */
+    public void setDocumentViewController(DocumentViewController _documentViewController) {
+        this._documentViewController = _documentViewController;
+        if (_documentViewController != null) {
+            _documentViewController.setDocumentViewPackage(_documentViewPackage);
+        }
+    }
+
+    /**
+     * @return the _documentToTrack
+     */
+    public Document getDocumentToTrack() {
+        return _documentToTrack;
+    }
+
+    /**
+     * @param _documentToTrack the _documentToTrack to set
+     */
+    public void setDocumentToTrack(Document documentToTrack) {
+        this._documentToTrack = documentToTrack;
+
+        setDocumentViewPackage(new DocumentViewPackageCommunicator(documentToTrack));
+
+        _documentViewPortal = getDocumentViewPackage().getPackageResultView();
+        _documentViewPortal.addObserver(this);
+
+        FilterLabelController labelController = new FilterLabelController(getDocumentViewPackage());
+        _labelPane.setController(labelController);
+
+        _labelPane.setLabelList(getDocumentViewPackage().getLabelList());
+
+        updateDisplayedDocumentText();
+    }
+
+    /**
+     * @return the _documentViewPackage
+     */
+    public DocumentViewPackageCommunicator getDocumentViewPackage() {
+        return _documentViewPackage;
+    }
+
+    /**
+     * @param _documentViewPackage the _documentViewPackage to set
+     */
+    public void setDocumentViewPackage(DocumentViewPackageCommunicator _documentViewPackage) {
+        this._documentViewPackage = _documentViewPackage;
+
+        if (_documentViewController != null) {
+            _documentViewController.setDocumentViewPackage(_documentViewPackage);
+        }
     }
 }

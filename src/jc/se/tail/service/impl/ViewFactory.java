@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jc.se.tail.service.impl;
 
 import jc.se.tail.model.document.Document;
@@ -19,20 +18,25 @@ import org.springframework.context.support.*;
  *
  * @author ruffy
  */
-public class ViewFactory implements IViewFactory, BeanFactoryAware{
+public class ViewFactory implements IViewFactory, BeanFactoryAware {
 
     private BeanFactory _beanFactory;
-    
+
     /**
-     * Initializes the view factory by telling it where to find the spring configuration file.
-     * @param springConfigClassPath The path to the spring config file. Should be the namespace sperated by slashes and then the name of the xml-file
+     * Initializes the view factory by telling it where to find the spring
+     * configuration file.
+     *
+     * @param springConfigClassPath The path to the spring config file. Should
+     * be the namespace sperated by slashes and then the name of the xml-file
      */
     public ViewFactory() {
     }
-    
+
     @Override
     public DocumentViewPane createDocumentViewPane(Document documentToTrack) {
-        return (DocumentViewPane) _beanFactory.getBean("documentViewPane");
+        DocumentViewPane viewPane = (DocumentViewPane) _beanFactory.getBean("documentViewPane");
+        viewPane.setDocumentToTrack(documentToTrack);
+        return viewPane;
     }
 
     @Override
@@ -44,5 +48,5 @@ public class ViewFactory implements IViewFactory, BeanFactoryAware{
     public void setBeanFactory(BeanFactory bf) throws BeansException {
         _beanFactory = bf;
     }
-    
+
 }

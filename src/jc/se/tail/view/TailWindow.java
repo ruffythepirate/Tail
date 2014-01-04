@@ -21,11 +21,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.FileChooserUI;
-import jc.se.tail.manager.DocumentManager;
+import jc.se.tail.command.DisplayDocumentCommand;
+import jc.se.tail.controller.TailController;
+import jc.se.tail.manager.impl.DocumentManager;
 import jc.se.tail.model.document.Document;
 import jc.se.tail.model.document.view.SortedView;
 import jc.se.tail.service.IViewFactory;
 import jc.se.tail.service.impl.ViewFactory;
+import jc.se.util.event.EventManager;
+import jc.se.util.event.IEvent;
+import jc.se.util.event.IEventListener;
 import jc.se.util.view.TabCloseActionHandler;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,32 +40,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class TailWindow extends javax.swing.JFrame {
 
-    protected DocumentManager _documentManager;
-    
-    protected IViewFactory _viewFactory;
-    
+    private EventManager _eventManager;
+
+    private IViewFactory _viewFactory;
+
+    private TailController _controller;
 
     /**
      * Creates new form TailWindow
      */
     public TailWindow() {
         initComponents();
-
-        _documentManager = new DocumentManager();
-    }
-
-    /**
-     * @return the _documentManager
-     */
-    public DocumentManager getDocumentManager() {
-        return _documentManager;
-    }
-
-    /**
-     * @param _documentManager the _documentManager to set
-     */
-    public void setDocumentManager(DocumentManager _documentManager) {
-        this._documentManager = _documentManager;
     }
 
     /**
@@ -77,10 +67,56 @@ public class TailWindow extends javax.swing.JFrame {
         this._viewFactory = _viewFactory;
     }
 
+    /**
+     * @return the _eventManager
+     */
+    public EventManager getEventManager() {
+        return _eventManager;
+    }
+
+    /**
+     * @param _eventManager the _eventManager to set
+     */
+    public void setEventManager(EventManager _eventManager) {
+        this._eventManager = _eventManager;
+
+        if (_eventManager != null) {
+            _eventManager.registerListener(DisplayDocumentCommand.PUBLISH_TOPIC,
+                    new IEventListener() {
+
+                        @Override
+                        public void NotifyEvent(IEvent event) {
+                            DisplayDocumentCommand command = (DisplayDocumentCommand) event;
+                            if (command != null) {
+                                Document document = command.getDocumentToDisplay();
+                                DocumentViewPane filePanel = getViewFactory()
+                                .createDocumentViewPane(document);
+                                addClosableTabbedPane(document.getFile(), filePanel);
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    /**
+     * @return the _controller
+     */
+    public TailController getController() {
+        return _controller;
+    }
+
+    /**
+     * @param _controller the _controller to set
+     */
+    public void setController(TailController _controller) {
+        this._controller = _controller;
+    }
+
     private class CloseFileTabActionHandler extends TabCloseActionHandler {
 
         Document _document;
-        
+
         public CloseFileTabActionHandler(JTabbedPane tabbedPane, Component tabComponent, Document document) {
             super(tabbedPane, tabComponent);
             _document = document;
@@ -90,8 +126,7 @@ public class TailWindow extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent evt) {
             super.actionPerformed(evt);
             try {
-                //Unregisters listener for the document.
-                getDocumentManager().stopTrackDocument(_document);
+                getController().closeDocument(_document);
             } catch (Exception ex) {
                 Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -234,19 +269,7 @@ public class TailWindow extends javax.swing.JFrame {
             File[] selectedFiles = _fileChooser.getSelectedFiles();
 
             for (File selectedFile : selectedFiles) {
-                Document document = new Document(selectedFile);
-                try {
-                    getDocumentManager().startTrackDocument(document);
-
-                    DocumentViewPane filePanel = new DocumentViewPane(document);
-                    addClosableTabbedPane(selectedFile, filePanel);
-
-                } catch (IOException ex) {
-                    Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                getController().openDocument(selectedFile);
             }
 
         }
@@ -345,16 +368,16 @@ public class TailWindow extends javax.swing.JFrame {
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(false);
             selectedPanel.addDocumentView(sortView);
-        }        
+        }
     }//GEN-LAST:event__sortMenuItemActionPerformed
 
     private void _sortDescMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__sortDescMenuItemActionPerformed
-         DocumentViewPane selectedPanel = getActiveFilePane();
+        DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
             SortedView sortView = new SortedView(true);
             selectedPanel.addDocumentView(sortView);
-        } 
+        }
     }//GEN-LAST:event__sortDescMenuItemActionPerformed
 
     private void _tabbedPaneComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event__tabbedPaneComponentAdded
@@ -365,10 +388,10 @@ public class TailWindow extends javax.swing.JFrame {
         updateMenuItemsEnabled();
     }//GEN-LAST:event__tabbedPaneComponentRemoved
 
-    private void updateMenuItemsEnabled(){
+    private void updateMenuItemsEnabled() {
         _editMenu.setEnabled(_tabbedPane.getTabCount() > 0);
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -399,16 +422,14 @@ public class TailWindow extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-                
-                        String springConfigClassPath = "jc/se/tail/configuration/spring-configuration.xml";
-                        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(springConfigClassPath);
 
-                        
+                String springConfigClassPath = "jc/se/tail/configuration/spring-configuration.xml";
+                ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(springConfigClassPath);
+
                 IViewFactory viewFactory = (IViewFactory) applicationContext.getBean("viewFactory");
-                
+
                 TailWindow tailWindow = viewFactory.createTailWindow();
-                
+
                 tailWindow.setVisible(true);
             }
         });

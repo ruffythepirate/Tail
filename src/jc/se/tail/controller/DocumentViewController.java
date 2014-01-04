@@ -15,9 +15,9 @@ import jc.se.tail.model.document.view.DocumentViewBase;
  */
 public class DocumentViewController {
     
-    private DocumentViewPackage _documentViewPackage;
+    protected DocumentViewPackage _documentViewPackage;
     
-    public DocumentViewController(DocumentViewPackage documentViewPackage) {
+    public DocumentViewController() {
         
     } 
     
@@ -27,6 +27,20 @@ public class DocumentViewController {
     
     public void removeDocumentView(DocumentViewBase documentView) {
         
+    }
+
+    /**
+     * @return the _documentViewPackage
+     */
+    public DocumentViewPackage getDocumentViewPackage() {
+        return _documentViewPackage;
+    }
+
+    /**
+     * @param _documentViewPackage the _documentViewPackage to set
+     */
+    public void setDocumentViewPackage(DocumentViewPackage _documentViewPackage) {
+        this._documentViewPackage = _documentViewPackage;
     }
     
 }

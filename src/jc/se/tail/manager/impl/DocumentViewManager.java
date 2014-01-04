@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jc.se.tail.manager;
+package jc.se.tail.manager.impl;
 
 import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.view.DocumentViewBase;

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package jc.se.tail.manager;
+package jc.se.tail.manager.impl;
 
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;

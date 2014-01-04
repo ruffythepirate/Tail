@@ -9,17 +9,50 @@
         the dependencies of views, controllers, managers and services.
     </description>
     
+
+    <!-- Views (Frames and Panes) -->
     
     <bean id="tailWindow" class="jc.se.tail.view.TailWindow" 
         scope="prototype">
-                
         <property name="viewFactory" ref="viewFactory"/>
-        <property name="documentManager" ref="documentManager"/>
+
+        <property name="eventManager" ref="eventManager"/>
+        
+        <property name="controller" ref="tailController"/>
     </bean>
+
+    <bean id="documentViewPane" class="jc.se.tail.view.DocumentViewPane"
+    scope="prototype">       
+        <property name="documentViewController" ref="documentViewController"/>
+    </bean>
+
+
+    <!-- Controllers -->
+    <bean id="documentViewController" class="jc.se.tail.controller.DocumentViewController" scope="prototype">       
+    </bean>
+    
+    <bean id="tailController" class="jc.se.tail.controller.TailController" scope="prototype">
+        <property name="documentManager" ref="documentManager"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+                        
+    <!-- Services -->
+    
+    <bean id="documentService" class="jc.se.tail.service.impl.DocumentService">
+        <property name="documentManager" ref="documentManager"/>
+        <property name="eventManager" ref="eventManager"/>
+    </bean>
+    
+    
+    
+    <!-- Factories -->
     
     <bean id="viewFactory" class="jc.se.tail.service.impl.ViewFactory" >
     </bean>
 
-    <bean id="documentManager" class="jc.se.tail.manager.DocumentManager"/>
+    <!-- Managers -->
+
+    <bean id="eventManager" class="jc.se.util.event.EventManager"/>
+    <bean id="documentManager" class="jc.se.tail.manager.impl.DocumentManager"/>
 
 </beans>

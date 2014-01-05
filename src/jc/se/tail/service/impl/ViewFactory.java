@@ -5,14 +5,13 @@
  */
 package jc.se.tail.service.impl;
 
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.service.IViewFactory;
 import jc.se.tail.view.DocumentViewPane;
 import jc.se.tail.view.TailWindow;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.context.support.*;
 
 /**
  *
@@ -33,9 +32,9 @@ public class ViewFactory implements IViewFactory, BeanFactoryAware {
     }
 
     @Override
-    public DocumentViewPane createDocumentViewPane(Document documentToTrack) {
+    public DocumentViewPane createDocumentViewPane(DocumentViewPackage documentViewPackage) {
         DocumentViewPane viewPane = (DocumentViewPane) _beanFactory.getBean("documentViewPane");
-        viewPane.setDocumentToTrack(documentToTrack);
+        viewPane.setDocumentToTrack(documentViewPackage);
         return viewPane;
     }
 

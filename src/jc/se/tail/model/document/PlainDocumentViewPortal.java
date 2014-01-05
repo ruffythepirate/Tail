@@ -6,7 +6,7 @@
 
 package jc.se.tail.model.document;
 
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.FileDocument;
 import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
@@ -18,9 +18,9 @@ import java.util.Observer;
  */
 public class PlainDocumentViewPortal extends Observable implements Observer, IDocumentViewPortal{
 
-    private Document _document;
+    private FileDocument _document;
     
-    public PlainDocumentViewPortal(Document parentDocument){
+    public PlainDocumentViewPortal(FileDocument parentDocument){
         _document = parentDocument;
         parentDocument.addObserver(this);
     }

@@ -6,8 +6,8 @@
 
 package jc.se.tail.manager;
 
-import java.io.IOException;
-import jc.se.tail.model.document.Document;
+import java.io.File;
+import jc.se.tail.model.document.DocumentViewPackage;
 
 /**
  *
@@ -15,8 +15,8 @@ import jc.se.tail.model.document.Document;
  */
 public interface IDocumentManager {
     
-    public void startTrackDocument(Document document) throws Exception;
+    public DocumentViewPackage openDocumentViewPackage(File file) throws Exception;
     
-    public void stopTrackDocument(Document document) throws Exception;
+    public void closeDocumentViewPackage(DocumentViewPackage documentViewPackage) throws Exception;
     
 }

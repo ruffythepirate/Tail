@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jc.se.tail.manager.IDocumentManager;
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.service.IDocumentService;
 
 /**
@@ -37,9 +37,10 @@ public class TailController {
         this._documentManager = _documentManager;
     }
     
-    public void closeDocument(Document documentToClose) {
+    public void closeDocument(DocumentViewPackage documentViewPackageToClose) {
         try {
-            _documentManager.stopTrackDocument(documentToClose);
+           
+            _documentService.closeDocumentViewPackage(documentViewPackageToClose);
         } catch (Exception ex) {
             Logger.getLogger(TailController.class.getName()).log(Level.SEVERE, null, ex);
         }

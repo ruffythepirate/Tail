@@ -51,11 +51,11 @@
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/IEventManager.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/SortedView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IViewFactory.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/command/DisplayDocumentCommand.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/TailWindow.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/IDocumentViewPortal.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/ILabelController.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/DocumentViewPackage.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/command/DisplayDocumentRequestCommand.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/ProxyDocumentView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/impl/ViewFactory.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/RegularExpressionView.java</file>

@@ -6,7 +6,6 @@
 package jc.se.tail.model.document;
 
 import jc.se.tail.model.document.view.DocumentViewBase;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -23,8 +22,21 @@ public class DocumentViewPackage extends DocumentViewBase {
     private final List<DocumentViewBase> _documentViews;
     
     protected ProxyDocumentView _packageResultView;
-    
-    
+
+    @Override
+    public String getShortSourceName() {
+        return _packageResultView.getShortSourceName();
+    }
+
+    @Override
+    public String getSourceName() {
+        return _packageResultView.getSourceName();
+    }
+
+    @Override
+    public String getSourceId() {
+        return _packageResultView.getSourceId();
+    }
 
     public DocumentViewPackage(DocumentViewBase rootView) {
         _rootView = rootView;
@@ -84,7 +96,7 @@ public class DocumentViewPackage extends DocumentViewBase {
         {
             return lastView.getTextLines(startLine);
         }
-        return new ArrayList<>();
+        return _packageResultView.getTextLines(startLine);
     }
 
     private DocumentViewBase getLastDocumentInPackage(){

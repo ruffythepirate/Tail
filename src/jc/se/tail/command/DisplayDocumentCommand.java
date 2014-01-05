@@ -6,7 +6,7 @@
 
 package jc.se.tail.command;
 
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.util.event.EventBase;
 
 /**
@@ -17,10 +17,10 @@ public class DisplayDocumentCommand extends EventBase{
    
     public static final String PUBLISH_TOPIC = "tail.document.display";
     
-    private Document _documentToDisplay;
+    private DocumentViewPackage _documentViewPackageToDisplay;
        
     
-    public DisplayDocumentCommand(Object sender, Document documentToDisplay) {
+    public DisplayDocumentCommand(Object sender, DocumentViewPackage documentToDisplay) {
         super(sender);
         setDocumentToDisplay(documentToDisplay);
     }
@@ -28,14 +28,14 @@ public class DisplayDocumentCommand extends EventBase{
     /**
      * @return the _documentToDisplay
      */
-    public Document getDocumentToDisplay() {
-        return _documentToDisplay;
+    public DocumentViewPackage getDocumentToDisplay() {
+        return _documentViewPackageToDisplay;
     }
 
     /**
      * @param _documentToDisplay the _documentToDisplay to set
      */
-    public void setDocumentToDisplay(Document _documentToDisplay) {
-        this._documentToDisplay = _documentToDisplay;
+    public void setDocumentToDisplay(DocumentViewPackage _documentToDisplay) {
+        this._documentViewPackageToDisplay = _documentToDisplay;
     }
 }

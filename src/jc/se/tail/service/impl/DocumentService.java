@@ -7,9 +7,11 @@
 package jc.se.tail.service.impl;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jc.se.tail.command.DisplayDocumentCommand;
 import jc.se.tail.manager.IDocumentManager;
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.service.IDocumentService;
 import jc.se.util.event.IEventManager;
 
@@ -30,13 +32,11 @@ public class DocumentService implements IDocumentService{
      * @param file The file that wants to be tailed.
      */
     public void openFile(File file) throws Exception {
-        // 1) Create the document, and subscribe to it.
-        Document newDocument = new Document(file);
         
-        getDocumentManager().startTrackDocument(newDocument);
+        DocumentViewPackage viewPackage = getDocumentManager().openDocumentViewPackage(file);
         
         // 2) Send an event to display the document.
-        DisplayDocumentCommand displayCommand = new DisplayDocumentCommand(this, newDocument);
+        DisplayDocumentCommand displayCommand = new DisplayDocumentCommand(this, viewPackage);
         getEventManager().publishEvent(DisplayDocumentCommand.PUBLISH_TOPIC,
                 displayCommand);
     }
@@ -67,6 +67,15 @@ public class DocumentService implements IDocumentService{
      */
     public void setEventManager(IEventManager _eventManager) {
         this._eventManager = _eventManager;
+    }
+
+    @Override
+    public void closeDocumentViewPackage(DocumentViewPackage viewPackageToClose) {
+        try {
+            getDocumentManager().closeDocumentViewPackage(viewPackageToClose);
+        } catch (Exception ex) {
+            Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

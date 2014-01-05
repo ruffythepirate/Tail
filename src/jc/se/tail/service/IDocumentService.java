@@ -7,6 +7,7 @@
 package jc.se.tail.service;
 
 import java.io.File;
+import jc.se.tail.model.document.DocumentViewPackage;
 
 /**
  *
@@ -15,5 +16,6 @@ import java.io.File;
 public interface IDocumentService {
     void openFile(File file) throws Exception;
     
+    void closeDocumentViewPackage(DocumentViewPackage viewPackageToClose);
     
 }

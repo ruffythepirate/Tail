@@ -6,8 +6,7 @@
 
 package jc.se.tail.model.document.view;
 
-import jc.se.tail.model.document.Document;
-import java.io.IOException;
+import jc.se.tail.model.document.FileDocument;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Observer;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jc.se.tail.model.document.Document;
 
 /**
  *
@@ -29,7 +27,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
     protected int _rowsAfter;
     protected boolean _shouldExcludeRows;
         
-    public DocumentFilterView(Document document, String filterString, int rowsAbove, int rowsAfter) {
+    public DocumentFilterView(FileDocument document, String filterString, int rowsAbove, int rowsAfter) {
         super();
         _filterString = filterString;
         _rowsAbove = rowsAbove;

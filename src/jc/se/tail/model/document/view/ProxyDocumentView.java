@@ -5,7 +5,6 @@
  */
 package jc.se.tail.model.document.view;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 
@@ -19,6 +18,7 @@ public class ProxyDocumentView extends DocumentViewBase {
 
     public ProxyDocumentView(DocumentViewBase wrappedDocumentView) {
         _wrappedDocumentView = wrappedDocumentView;
+        setParentDocumentView(wrappedDocumentView);
     }
 
     @Override

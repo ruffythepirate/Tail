@@ -6,7 +6,7 @@
 
 package jc.se.tail.service;
 
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.view.*;
 
 /**
@@ -14,7 +14,7 @@ import jc.se.tail.view.*;
  * @author ruffy
  */
 public interface IViewFactory {
-    DocumentViewPane createDocumentViewPane(Document documentToTrack);
+    DocumentViewPane createDocumentViewPane(DocumentViewPackage documentViewPackage);
 
     TailWindow createTailWindow();
 }

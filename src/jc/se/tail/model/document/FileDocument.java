@@ -9,7 +9,6 @@ import jc.se.tail.model.document.view.DocumentFilterView;
 import jc.se.tail.model.document.view.DocumentViewBase;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
@@ -20,8 +19,6 @@ import static java.nio.file.StandardOpenOption.READ;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 import jc.se.tail.model.impl.RowInfo;
 
@@ -29,14 +26,14 @@ import jc.se.tail.model.impl.RowInfo;
  *
  * @author ruffy
  */
-public class Document extends DocumentViewBase {
+public class FileDocument extends DocumentViewBase {
 
     private File _wrappedFile;
     private int _numberOfLines;
     private List<RowInfo> _lineReadPositions;
     private boolean _documentIsCached;
 
-    public Document(File file) {
+    public FileDocument(File file) {
         
         _wrappedFile = file;
         _lineReadPositions = new ArrayList<RowInfo>();
@@ -44,6 +41,37 @@ public class Document extends DocumentViewBase {
 
     }
 
+    @Override
+    public String getSourceName() {
+        if(getFile() != null)
+        {
+            return getFile().getAbsolutePath();
+        }
+        return "No File!";
+    }
+
+    @Override
+    public String getShortSourceName() {
+        if(getFile() != null)
+        {
+            return getFile().getName();
+        }
+        return "No File!";
+    }
+
+    @Override
+    public String getSourceId() {
+        if(getFile() != null)
+        {
+            return getFile().getAbsolutePath();
+        }
+        return "No File!";
+    }
+    
+    
+
+    
+    
     public IDocumentViewPortal getFilterView(String filterText, int linesBefore, int linesAfter) {
         return new DocumentFilterView(this, filterText, linesBefore, linesAfter);
     }
@@ -102,6 +130,9 @@ public class Document extends DocumentViewBase {
     public List<String> getTextLines(int startLine) throws IOException {
 
         if (!_documentIsCached) {
+            if(_documentLines == null) {
+                _documentLines = new ArrayList<>();
+            }
             while(startLine >= 0 && _documentLines.size() > startLine) {
                 _documentLines.remove(_documentLines.size()-1);
             }
@@ -164,7 +195,7 @@ public class Document extends DocumentViewBase {
         //
     }
 
-    public boolean equals(Path pathToFile) {
+    public boolean isFileDefinedByPath(Path pathToFile) {
         return pathToFile.toFile().equals(_wrappedFile);
     }
 

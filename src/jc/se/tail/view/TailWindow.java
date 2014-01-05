@@ -11,7 +11,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
@@ -20,14 +19,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.plaf.FileChooserUI;
 import jc.se.tail.command.DisplayDocumentCommand;
 import jc.se.tail.controller.TailController;
-import jc.se.tail.manager.impl.DocumentManager;
-import jc.se.tail.model.document.Document;
+import jc.se.tail.model.document.DocumentViewPackage;
 import jc.se.tail.model.document.view.SortedView;
 import jc.se.tail.service.IViewFactory;
-import jc.se.tail.service.impl.ViewFactory;
 import jc.se.util.event.EventManager;
 import jc.se.util.event.IEvent;
 import jc.se.util.event.IEventListener;
@@ -88,10 +84,10 @@ public class TailWindow extends javax.swing.JFrame {
                         public void NotifyEvent(IEvent event) {
                             DisplayDocumentCommand command = (DisplayDocumentCommand) event;
                             if (command != null) {
-                                Document document = command.getDocumentToDisplay();
+                                DocumentViewPackage documentViewPackage = command.getDocumentToDisplay();
                                 DocumentViewPane filePanel = getViewFactory()
-                                .createDocumentViewPane(document);
-                                addClosableTabbedPane(document.getFile(), filePanel);
+                                    .createDocumentViewPane(documentViewPackage);
+                                addClosableTabbedPane(documentViewPackage, filePanel);
 
                             }
                         }
@@ -115,18 +111,18 @@ public class TailWindow extends javax.swing.JFrame {
 
     private class CloseFileTabActionHandler extends TabCloseActionHandler {
 
-        Document _document;
+        DocumentViewPackage documentViewPackage;
 
-        public CloseFileTabActionHandler(JTabbedPane tabbedPane, Component tabComponent, Document document) {
+        public CloseFileTabActionHandler(JTabbedPane tabbedPane, Component tabComponent, DocumentViewPackage viewPackage) {
             super(tabbedPane, tabComponent);
-            _document = document;
+            documentViewPackage = viewPackage;
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
             super.actionPerformed(evt);
             try {
-                getController().closeDocument(_document);
+                getController().closeDocument(documentViewPackage);
             } catch (Exception ex) {
                 Logger.getLogger(TailWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -276,13 +272,13 @@ public class TailWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void addClosableTabbedPane(File selectedFile, DocumentViewPane filePanel) {
-        _tabbedPane.addTab(selectedFile.getName(), null, filePanel, selectedFile.getAbsolutePath());
+    private void addClosableTabbedPane(DocumentViewPackage viewPackage, DocumentViewPane filePanel) {
+        _tabbedPane.addTab(viewPackage.getShortSourceName(), null, filePanel, viewPackage.getSourceName());
 
         int index = _tabbedPane.indexOfComponent(filePanel);
         JPanel pnlTab = new JPanel(new GridBagLayout());
         pnlTab.setOpaque(false);
-        JLabel lblTitle = new JLabel(selectedFile.getName());
+        JLabel lblTitle = new JLabel(viewPackage.getShortSourceName());
         JButton btnClose = new JButton("x");
 
         GridBagConstraints gbc = new GridBagConstraints();

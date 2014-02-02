@@ -6,11 +6,13 @@
 
 package jc.se.tail.dialog;
 
+import jc.se.tail.model.document.view.IRegularExpressionViewSettings;
+
 /**
  *
  * @author ruffy
  */
-public class RegularExpressionDialog extends javax.swing.JDialog {
+public class RegularExpressionDialog extends javax.swing.JDialog implements IRegularExpressionViewSettings {
 
         protected boolean _shouldFilter;
         

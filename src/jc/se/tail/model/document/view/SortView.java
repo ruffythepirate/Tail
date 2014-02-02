@@ -15,13 +15,13 @@ import jc.se.util.compare.StringComparator;
  *
  * @author ruffy
  */
-public class SortedView extends DocumentViewBase implements Observer {
+public class SortView extends DocumentViewBase implements Observer {
 
     protected boolean _sortDescending;
     
     private StringComparator _stringComparator;
 
-    public SortedView(boolean sortDescending) {
+    public SortView(boolean sortDescending) {
         _sortDescending = sortDescending;
         _stringComparator = new StringComparator();
     }

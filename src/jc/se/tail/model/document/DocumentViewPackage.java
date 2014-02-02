@@ -21,6 +21,8 @@ public class DocumentViewPackage extends DocumentViewBase {
 
     private final List<DocumentViewBase> _documentViews;
     
+    private final List<IViewPackageListener> _viewPackageListeners;
+    
     protected ProxyDocumentView _packageResultView;
 
     @Override
@@ -44,9 +46,30 @@ public class DocumentViewPackage extends DocumentViewBase {
         _packageResultView = new ProxyDocumentView(rootView);
         
         _documentViews = new ArrayList<DocumentViewBase>();
+        _viewPackageListeners = new ArrayList<>();
+    }
+    
+    public void addViewPackageListener(IViewPackageListener listener) {
+        _viewPackageListeners.add(listener);
+    }
+    
+    public void removeViewPackageListener(IViewPackageListener listener) {
+        _viewPackageListeners.remove(listener);
+    }
+    
+    private void notifyViewAdded(DocumentViewBase view) {
+        for(IViewPackageListener listener : _viewPackageListeners) {
+            listener.viewAddedReceived(view);
+        }        
+    }
+    
+    private void notifyViewRemoved(DocumentViewBase view) {
+        for(IViewPackageListener listener : _viewPackageListeners) {
+            listener.viewRemovedReceived(view);
+        }
     }
 
-    public void appendDocumentView(DocumentViewBase documentView) {
+    public void addDocumentView(DocumentViewBase documentView) {
 
         DocumentViewBase parentView = getLastDocumentInPackage();
         if (parentView == null) {
@@ -55,13 +78,15 @@ public class DocumentViewPackage extends DocumentViewBase {
         documentView.setParentDocumentView(parentView);
         _documentViews.add(documentView);        
         _packageResultView.setWrappedDocumentView(documentView);
+        
+        notifyViewAdded(documentView);
     }
 
-    public void removeDocumentView(DocumentViewBase documentView) {
+    public void removeDocumentView(DocumentViewBase documentViewToRemove) {
 
         
         for (DocumentViewBase addedView : _documentViews) {
-            if (addedView == documentView) {
+            if (addedView == documentViewToRemove) {
                 addedView.deleteObserver(this);
                 _documentViews.remove(addedView);
                 if( getPackageResultView().getWrappedDocumentView() == addedView)
@@ -80,6 +105,7 @@ public class DocumentViewPackage extends DocumentViewBase {
 
         }
 
+        notifyViewRemoved(documentViewToRemove);
     }
 
     public DocumentViewBase getCompiledView() {

@@ -13,7 +13,7 @@ import java.io.RandomAccessFile;
 import java.util.List;
 import jc.se.tail.file.IRandomAccessFile;
 import jc.se.tail.file.impl.RandomAccessFileWrapper;
-import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.FilterView;
 import jc.se.tail.service.IFileService;
 import jc.se.tail.service.impl.FileService;
 import static org.junit.Assert.assertEquals;

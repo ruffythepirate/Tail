@@ -7,12 +7,13 @@ package jc.se.tail.dialog;
 
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import jc.se.tail.model.document.view.IFilterViewSettings;
 
 /**
  *
  * @author ruffy
  */
-public class FilterDialog extends javax.swing.JDialog {
+public class FilterDialog extends javax.swing.JDialog implements IFilterViewSettings{
 
     private boolean _shouldFilter;
 

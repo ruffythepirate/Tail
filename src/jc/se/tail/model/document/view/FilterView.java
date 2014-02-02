@@ -20,14 +20,14 @@ import java.util.logging.Logger;
  *
  * @author ruffy
  */
-public class DocumentFilterView extends DocumentViewBase implements Observer{
+public class FilterView extends DocumentViewBase implements Observer{
     
     protected String _filterString;
     protected int _rowsAbove;
     protected int _rowsAfter;
     protected boolean _shouldExcludeRows;
         
-    public DocumentFilterView(FileDocument document, String filterString, int rowsAbove, int rowsAfter) {
+    public FilterView(FileDocument document, String filterString, int rowsAbove, int rowsAfter) {
         super();
         _filterString = filterString;
         _rowsAbove = rowsAbove;
@@ -37,14 +37,14 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
 
     }
     
-    public DocumentFilterView(String filterString, int rowsAbove, int rowsAfter) {
+    public FilterView(String filterString, int rowsAbove, int rowsAfter) {
         super();
         _filterString = filterString;
         _rowsAbove = rowsAbove;
         _rowsAfter = rowsAfter;
     }
     
-    public DocumentFilterView(){
+    public FilterView(){
         super();
     }
 
@@ -103,7 +103,7 @@ public class DocumentFilterView extends DocumentViewBase implements Observer{
             try {
                 getTextLines(0);
             } catch (Exception ex) {
-                Logger.getLogger(DocumentFilterView.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(FilterView.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return _documentLines.size();

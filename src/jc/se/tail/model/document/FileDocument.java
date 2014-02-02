@@ -5,7 +5,7 @@
  */
 package jc.se.tail.model.document;
 
-import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.FilterView;
 import jc.se.tail.model.document.view.DocumentViewBase;
 import java.io.BufferedReader;
 import java.io.File;
@@ -73,7 +73,7 @@ public class FileDocument extends DocumentViewBase {
     
     
     public IDocumentViewPortal getFilterView(String filterText, int linesBefore, int linesAfter) {
-        return new DocumentFilterView(this, filterText, linesBefore, linesAfter);
+        return new FilterView(this, filterText, linesBefore, linesAfter);
     }
 
     public IDocumentViewPortal getNormalView() {

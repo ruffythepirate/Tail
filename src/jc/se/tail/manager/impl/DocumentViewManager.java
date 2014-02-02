@@ -20,7 +20,7 @@ public class DocumentViewManager {
     
     public void AddViewToCurrentPackage(DocumentViewBase documentView){
         if(_currentDocumentPackage != null) {
-            _currentDocumentPackage.appendDocumentView(documentView);
+            _currentDocumentPackage.addDocumentView(documentView);
         }
     }
     

@@ -5,7 +5,7 @@
  */
 package jc.se.tail.model.document;
 
-import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.FilterView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class DocumentFilterViewTest {
     }
 
     DocumentViewMock _parent;
-    private DocumentFilterView _target;
+    private FilterView _target;
 
     @Before
     public void setUp() {
@@ -32,7 +32,7 @@ public class DocumentFilterViewTest {
         _parent = new DocumentViewMock() {
         };
 
-        _target = new DocumentFilterView();
+        _target = new FilterView();
         _target.setParentDocumentView(_parent);
     }
 

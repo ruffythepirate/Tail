@@ -12,12 +12,15 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JLabel;
+import jc.se.tail.model.document.DocumentViewPackage;
+import jc.se.tail.model.document.IViewPackageListener;
+import jc.se.tail.model.document.view.DocumentViewBase;
 
 /**
  *
  * @author Ruffy
  */
-public class LabelPane extends javax.swing.JPanel implements Observer{
+public class LabelPane extends javax.swing.JPanel implements Observer, IViewPackageListener{
 
     
     protected ILabelController _controller;
@@ -26,6 +29,8 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
     private List<JLabel> _labelComponents;
     
     private Map<JLabel, LabelItem> _itemDictionary;
+    
+    private DocumentViewPackage _documentViewPackage;
     
     private Observable _requestLabelAction;
     
@@ -127,6 +132,16 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
     public LabelList getLabelList() {
         return _labelList;
     }
+    
+    public void setDocumentViewPackage(DocumentViewPackage documentViewPackage) {
+        if(_documentViewPackage != null) {
+            _documentViewPackage.removeViewPackageListener(this);
+        }
+        _documentViewPackage = documentViewPackage;
+        if(_documentViewPackage != null) {
+            _documentViewPackage.addViewPackageListener(this);
+        }
+    }
 
     /**
      * @param _labelList the _labelList to set
@@ -154,6 +169,20 @@ public class LabelPane extends javax.swing.JPanel implements Observer{
      */
     public void setController(ILabelController _controller) {
         this._controller = _controller;
+    }
+
+    public DocumentViewPackage getDocumentViewPackage() {
+        return _documentViewPackage;
+    }
+
+    @Override
+    public void viewAddedReceived(DocumentViewBase view) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void viewRemovedReceived(DocumentViewBase view) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

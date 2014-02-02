@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jc.se.tail.file.IRandomAccessFile;
 import jc.se.tail.file.impl.RandomAccessFileWrapper;
-import jc.se.tail.model.document.view.DocumentFilterView;
+import jc.se.tail.model.document.view.FilterView;
 import jc.se.tail.model.document.view.DocumentViewBase;
 import jc.se.tail.model.document.view.DocumentViewUpdatedArgs;
 import jc.se.tail.model.impl.RowInfo;

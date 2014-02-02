@@ -23,7 +23,7 @@
 
     <bean id="documentViewPane" class="jc.se.tail.view.DocumentViewPane"
     scope="prototype">       
-        <property name="documentViewController" ref="documentViewController"/>
+        <property name="controller" ref="documentViewController"/>
     </bean>
 
 

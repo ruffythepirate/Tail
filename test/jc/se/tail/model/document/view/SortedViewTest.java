@@ -18,7 +18,7 @@ import org.junit.Test;
 public class SortedViewTest {
 
     DocumentViewMock _parent;
-    private SortedView _target;
+    private SortView _target;
 
     @Before
     public void setUp() {
@@ -26,7 +26,7 @@ public class SortedViewTest {
         _parent = new DocumentViewMock() {
         };
 
-        _target = new SortedView(true);
+        _target = new SortView(true);
         _target.setParentDocumentView(_parent);
     }
 

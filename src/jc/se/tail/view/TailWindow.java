@@ -22,7 +22,6 @@ import javax.swing.JTabbedPane;
 import jc.se.tail.command.DisplayDocumentCommand;
 import jc.se.tail.controller.TailController;
 import jc.se.tail.model.document.DocumentViewPackage;
-import jc.se.tail.model.document.view.SortedView;
 import jc.se.tail.service.IViewFactory;
 import jc.se.util.event.EventManager;
 import jc.se.util.event.IEvent;
@@ -315,9 +314,7 @@ public class TailWindow extends javax.swing.JFrame {
             boolean shouldFilter = settings.getShouldFilter();
             if (shouldFilter) {
                 //We create a filter for the current tab.
-                selectedPanel.appendFilter(settings.getFilterText(),
-                        settings.getRowsBefore(), settings.getRowsAfter(),
-                        settings.getShouldExcludeRows());
+                selectedPanel.getController().addFilterView(settings);
             }
         }
 
@@ -344,15 +341,11 @@ public class TailWindow extends javax.swing.JFrame {
 
         if (selectedPanel != null) {
             RegularExpressionDialog settings = new RegularExpressionDialog(this, true);
-
             settings.setVisible(true);
-
             boolean shouldFilter = settings.isShouldFilter();
             if (shouldFilter) {
                 //We create a filter for the current tab.
-                selectedPanel.appendReformat(
-                        settings.getSearchText(),
-                        settings.getReplacementText());
+                selectedPanel.getController().addRegularExpressionView(settings);
             }
         }
     }//GEN-LAST:event__reformatRowsMenuItemActionPerformed
@@ -362,8 +355,7 @@ public class TailWindow extends javax.swing.JFrame {
         DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
-            SortedView sortView = new SortedView(false);
-            selectedPanel.addDocumentView(sortView);
+            selectedPanel.getController().addSortView(false);
         }
     }//GEN-LAST:event__sortMenuItemActionPerformed
 
@@ -371,8 +363,7 @@ public class TailWindow extends javax.swing.JFrame {
         DocumentViewPane selectedPanel = getActiveFilePane();
 
         if (selectedPanel != null) {
-            SortedView sortView = new SortedView(true);
-            selectedPanel.addDocumentView(sortView);
+            selectedPanel.getController().addSortView(true);
         }
     }//GEN-LAST:event__sortDescMenuItemActionPerformed
 

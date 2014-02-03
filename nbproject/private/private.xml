@@ -17,57 +17,21 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/TabCloseActionHandler.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/DocumentFilterViewTest.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IFileService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/action/FilterAction.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/compare/StringComparator.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/LabelProviderBase.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/IFilterViewSettings.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/TailWindow.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/adapter/ViewPackageToLabelAdapter.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/configuration/spring-configuration.xml</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/IDocumentManager.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/TailDocumentView.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/dialog/RegularExpressionDialog.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/SortView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/controller/DocumentViewController.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/dialog/FilterDialog.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/impl/ApplicationService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/impl/FileService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/SimpleDocumentView.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/file/impl/RandomAccessFileWrapper.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/controller/TailController.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/EventManager.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/IEventListener.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IDocumentService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/IEvent.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/impl/DocumentManager.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/LabelAdapterBase.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/view/SortedViewTest.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentFilterView.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/PlainDocumentViewPortal.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/file/IRandomAccessFile.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/IndexedDocument.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/LabelPane.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/FileDocument.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/test/jc/se/tail/model/document/IndexedDocumentTest.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/EventBase.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewBase.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/impl/DocumentViewManager.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/event/IEventManager.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/SortedView.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IViewFactory.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/command/DisplayDocumentCommand.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/adapter/ViewPackageToLabelAdapter.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/TailWindow.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/IDocumentViewPortal.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/ILabelController.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/IRegularExpressionViewSettings.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/DocumentViewPackage.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/IViewPackageListener.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/ProxyDocumentView.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/impl/ViewFactory.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/RegularExpressionView.java</file>
             <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/view/DocumentViewPane.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/controller/FilterLabelController.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/impl/DocumentService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewUpdatedArgs.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/service/IApplicationService.java</file>
-            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/manager/impl/DirectoryEventsListener.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/FilterView.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/util/view/labelpane/LabelPane.java</file>
+            <file>file:/Users/ruffy/NetBeansProjects/Tail/src/jc/se/tail/model/document/view/DocumentViewBase.java</file>
         </group>
     </open-files>
 </project-private>

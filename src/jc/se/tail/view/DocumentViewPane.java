@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+import jc.se.tail.adapter.ViewPackageToLabelAdapter;
 import jc.se.tail.controller.DocumentViewController;
 import jc.se.tail.controller.FilterLabelController;
 import jc.se.tail.model.document.view.DocumentViewBase;
@@ -52,23 +53,6 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
     public DocumentViewPane() {
         initComponents();
         doLayout();
-
-//        _labelPane.getLabelList().addObserver(new Observer() {
-//
-//            @Override
-//            public void update(Observable o, Object arg) {
-//                if (arg instanceof LabelsUpdatedEvent) {
-//                    LabelsUpdatedEvent event = (LabelsUpdatedEvent) arg;
-//                    if (event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_REMOVED) {
-//                        LabelItem labelItem = event.getLabel();
-//                        if (labelItem.getTag() instanceof DocumentViewBase) {
-//                            removeFilter((DocumentViewBase) labelItem.getTag());
-//                        }
-//                    }
-//                }
-//
-//            }
-//        });
 
         _highlightPainter
                 = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
@@ -630,6 +614,9 @@ public class DocumentViewPane extends javax.swing.JPanel implements Observer {
         FilterLabelController labelController = new FilterLabelController(documentViewPackage);
         _labelPane.setController(labelController);
 
+        ViewPackageToLabelAdapter adapter = new ViewPackageToLabelAdapter(documentViewPackage);
+        _labelPane.setLabelProvider(adapter);
+        
         getController().setDocumentViewPackage(_documentViewPackage);
         
         updateDisplayedDocumentText();

@@ -9,30 +9,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JLabel;
-import jc.se.tail.model.document.DocumentViewPackage;
-import jc.se.tail.model.document.IViewPackageListener;
-import jc.se.tail.model.document.view.DocumentViewBase;
 
 /**
  *
  * @author Ruffy
  */
-public class LabelPane extends javax.swing.JPanel implements Observer, IViewPackageListener{
+public class LabelPane extends javax.swing.JPanel implements ILabelProviderListener{
 
     
     protected ILabelController _controller;
-    protected LabelList _labelList;
-    
+
     private List<JLabel> _labelComponents;
     
     private Map<JLabel, LabelItem> _itemDictionary;
     
-    private DocumentViewPackage _documentViewPackage;
-    
-    private Observable _requestLabelAction;
+    private LabelProviderBase _labelProvider;
     
     /**
      * Creates new form LabelPane
@@ -44,8 +36,6 @@ public class LabelPane extends javax.swing.JPanel implements Observer, IViewPack
         
         _itemDictionary = new HashMap<JLabel, LabelItem>();
 
-        setLabelList(new LabelList());
-        
         _labelComponents = new ArrayList<JLabel>();
     }
     
@@ -74,25 +64,6 @@ public class LabelPane extends javax.swing.JPanel implements Observer, IViewPack
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void update(Observable o, Object arg) {
-        try {
-        if(arg instanceof LabelsUpdatedEvent) {
-            LabelsUpdatedEvent event = (LabelsUpdatedEvent) arg;
-            
-            if(event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_ADDED) {
-                addLabel(event.getLabel());
-            } else if(event.getEventType() == LabelsUpdatedEvent.EVENT_LABEL_REMOVED) {
-                removeLabel(event.getLabel());                
-            }
-
-        }
-        }
-        catch(Exception ex){
-            
-        }
-    }
     
     private void addLabel(LabelItem label) {
         
@@ -113,11 +84,11 @@ public class LabelPane extends javax.swing.JPanel implements Observer, IViewPack
         revalidate();
    }
     
-    private void removeLabel(LabelItem label) {
+    private void removeLabel(Object key) {
         for(JLabel addedLabel : _labelComponents) {
             
             LabelItem labelItem = _itemDictionary.get(addedLabel);
-            if(labelItem == label) {
+            if(labelItem.getTag() == key) {
                 
                 _labelComponents.remove(addedLabel);
                 remove(addedLabel);
@@ -129,32 +100,15 @@ public class LabelPane extends javax.swing.JPanel implements Observer, IViewPack
         repaint();
     }
 
-    public LabelList getLabelList() {
-        return _labelList;
-    }
-    
-    public void setDocumentViewPackage(DocumentViewPackage documentViewPackage) {
-        if(_documentViewPackage != null) {
-            _documentViewPackage.removeViewPackageListener(this);
-        }
-        _documentViewPackage = documentViewPackage;
-        if(_documentViewPackage != null) {
-            _documentViewPackage.addViewPackageListener(this);
-        }
-    }
 
-    /**
-     * @param _labelList the _labelList to set
-     */
-    public void setLabelList(LabelList _labelList) {
-
-        if(_labelList != null) {
-            _labelList.deleteObserver(this);
+    public void setLabelProvider(LabelProviderBase labelProvider) {
+        if(_labelProvider != null) {
+            _labelProvider.removeLabelListener(this);
         }
-        this._labelList = _labelList;
-        
-        _labelList.addObserver(this);
-
+        _labelProvider = labelProvider;
+        if(_labelProvider != null) {
+            _labelProvider.addLabelListener(this);
+        }
     }
 
     /**
@@ -171,18 +125,15 @@ public class LabelPane extends javax.swing.JPanel implements Observer, IViewPack
         this._controller = _controller;
     }
 
-    public DocumentViewPackage getDocumentViewPackage() {
-        return _documentViewPackage;
+    @Override
+    public void OnLabelAdded(LabelEvent labelEvent) {
+        LabelItem labelItem = new LabelItem(labelEvent.getLabelText(), labelEvent.getKey());
+        addLabel(labelItem);
     }
 
     @Override
-    public void viewAddedReceived(DocumentViewBase view) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void viewRemovedReceived(DocumentViewBase view) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void OnLabelRemoved(LabelEvent labelEvent) {
+        removeLabel(labelEvent.getKey());
     }
     
 }
